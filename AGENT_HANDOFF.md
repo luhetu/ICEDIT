@@ -198,6 +198,13 @@ public. Keep checkpoints, private data, secrets and large outputs excluded.
 
 ## Latest Sync Verification
 
+- Presentation follow-up: created the actual six-slide English deck at
+  `reports/ICEdit_CVPR_Progress_2026-09-15.pptx` and a PDF preview alongside it.
+  Rebuild using `python scripts/build_progress_deck.py` (requires python-pptx).
+  Local copies are in `/home/hetu/MY project/`. Job 1042473 was still PENDING
+  when checked during presentation preparation. Slides are a dated status
+  snapshot and contain proposals, not new successful generation claims.
+
 - Python compilation passed for the new ObjectClear helpers, removal pilot, and parser.
 - Bash syntax checks passed for the relevant activation and Slurm scripts.
 - `git diff --cached --check` passed after formatting cleanup.
