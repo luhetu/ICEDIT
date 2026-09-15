@@ -1,0 +1,27 @@
+{
+  "parquet": "train/parquet/train-00115-of-00571.parquet",
+  "start_index": 0,
+  "max_samples": 5,
+  "pipeline_mode": "plan-only",
+  "planner": "rule",
+  "planner_model": null,
+  "task_filter": [],
+  "selected": 5,
+  "completed": 5,
+  "skipped": 0,
+  "failed": 0,
+  "planned_ready": 5,
+  "planning_blocked": 0,
+  "planning_statuses": {
+    "ready": 5
+  },
+  "generated_count": 0,
+  "metadata_only_count": 5,
+  "execution_blocked": 0,
+  "execution_statuses": {
+    "not_requested": 5
+  },
+  "verification_statuses": {
+    "not_run": 5
+  }
+}

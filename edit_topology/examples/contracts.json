@@ -1,0 +1,1823 @@
+[
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_man_ambiguous",
+    "instruction": "Add a man.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "new man",
+      "entity_type": "person",
+      "instance_ref": "new_person",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "add more than one person",
+      "change an existing person",
+      "invent unsupported age, hair, or pose requirements"
+    ],
+    "invariants": [
+      {
+        "subject": "existing scene",
+        "property": "all unrelated entities and layout",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new man",
+          "entity_ref": "new_person",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "contact shadow and local occlusion",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "available space, perspective, lighting, and source style",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "all existing people and background outside insertion footprint",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "appearance and placement",
+        "status": "unresolved",
+        "confidence": 0.2,
+        "description": "The instruction specifies neither appearance nor placement.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Where should the man be placed, and should any appearance attributes be specified?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "add exactly one man",
+        "source": "instruction",
+        "evidence": "singular noun: a man"
+      },
+      {
+        "claim": "preserve unrelated content",
+        "source": "annotation_rule",
+        "evidence": "minimal-change principle"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_man_user_selected_location",
+    "instruction": "Add a man.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "new man",
+      "entity_type": "person",
+      "instance_ref": "new_person",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [
+      {
+        "field": "placement",
+        "value": "user-selected empty region",
+        "source": "user_input",
+        "scope": "placement"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_person",
+        "predicate": "stands_on",
+        "object": "ground_plane",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "back-facing pose unless requested",
+      "unsupported age or baldness",
+      "replacement of an existing person"
+    ],
+    "invariants": [
+      {
+        "subject": "existing scene",
+        "property": "identity and composition",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new man in selected region",
+          "entity_ref": "new_person",
+          "mask_status": "provided"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "feet contact and cast shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "ground plane, perspective, and nearby people",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "existing entities outside selected region",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "appearance",
+        "status": "unresolved",
+        "confidence": 0.3,
+        "description": "Appearance remains underspecified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Should appearance be left source-consistent or explicitly described?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "placement comes from selection",
+        "source": "user_input",
+        "evidence": "optional selection"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_hat_multiple_people",
+    "instruction": "Add a hat.",
+    "topology": "attach_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "hat",
+      "entity_type": "hat",
+      "instance_ref": "new_hat",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": null,
+      "part": "head",
+      "relation": "worn_on"
+    },
+    "referring_constraints": [],
+    "required_relations": [
+      {
+        "subject": "new_hat",
+        "predicate": "worn_on",
+        "object": "selected_person.head",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "hat on multiple people",
+      "floating hat",
+      "change faces or hair beyond local occlusion"
+    ],
+    "invariants": [
+      {
+        "subject": "all people",
+        "property": "identity, face, pose, and clothing",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "one new hat",
+          "entity_ref": "new_hat",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "selected head, hair occlusion, and local shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "candidate people, head pose, lighting, and style",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "unselected people and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "anchor.instance_ref",
+        "status": "unresolved",
+        "confidence": 0.1,
+        "description": "Several people are plausible anchors.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Which person should wear the hat?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "exactly one hat",
+        "source": "instruction",
+        "evidence": "singular: a hat"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_hat_selected_person",
+    "instruction": "Add a hat to the foreground woman.",
+    "topology": "attach_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "hat",
+      "entity_type": "hat",
+      "instance_ref": "new_hat",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": "foreground_woman",
+      "part": "head",
+      "relation": "worn_on"
+    },
+    "referring_constraints": [
+      {
+        "field": "person.position",
+        "value": "foreground",
+        "source": "instruction",
+        "scope": "anchor"
+      },
+      {
+        "field": "person.gender_presentation",
+        "value": "woman",
+        "source": "instruction",
+        "scope": "anchor"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_hat",
+        "predicate": "worn_on",
+        "object": "foreground_woman.head",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "additional hats",
+      "hat on another person",
+      "face or identity change"
+    ],
+    "invariants": [
+      {
+        "subject": "foreground_woman",
+        "property": "identity, face, pose, and clothing",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new hat",
+          "entity_ref": "new_hat",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "hair beneath hat and hat shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "head orientation and lighting",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "face, body, other people, and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "foreground woman is anchor",
+        "source": "instruction",
+        "evidence": "explicit referring phrase"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_church_preserve_train",
+    "instruction": "Add a church building.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "church building",
+      "entity_type": "building",
+      "instance_ref": "new_church",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "replace or occlude the train",
+      "break the railway relation",
+      "remove an existing building"
+    ],
+    "invariants": [
+      {
+        "subject": "train",
+        "property": "presence, geometry, and railway relation",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new church building",
+          "entity_ref": "new_church",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "ground contact and cast shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "scene depth, architecture, perspective, and lighting",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "train, railway, existing buildings, and people",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "placement",
+        "status": "unresolved",
+        "confidence": 0.15,
+        "description": "No insertion location is specified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Where should the church be added without occluding the train?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "train must remain",
+        "source": "annotation_rule",
+        "evidence": "unrelated existing entity"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_church_background",
+    "instruction": "Add a church building in the empty background behind the railway.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "church building",
+      "entity_type": "building",
+      "instance_ref": "new_church",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [
+      {
+        "field": "placement",
+        "value": "empty background behind railway",
+        "source": "instruction",
+        "scope": "placement"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_church",
+        "predicate": "behind",
+        "object": "railway",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "church in front of train",
+      "train replacement",
+      "railway deformation"
+    ],
+    "invariants": [
+      {
+        "subject": "train and railway",
+        "property": "all visible content and relation",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "church in empty background",
+          "entity_ref": "new_church",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "local skyline and ground contact",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "background perspective, palette, and lighting",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "train, railway, foreground, and occupied background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "church lies behind railway",
+        "source": "instruction",
+        "evidence": "explicit spatial phrase"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_long_hair_single_person",
+    "instruction": "Add long hair.",
+    "topology": "modify_attribute",
+    "operation": "modify",
+    "target": {
+      "kind": "attribute",
+      "name": "long hair",
+      "entity_type": "person",
+      "attribute_name": "hair.length",
+      "instance_ref": "only_person",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": "only_person",
+      "part": "hair",
+      "relation": "attribute_of"
+    },
+    "referring_constraints": [
+      {
+        "field": "person.cardinality",
+        "value": "only visible person",
+        "source": "image",
+        "scope": "anchor"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "long_hair",
+        "predicate": "attribute_of",
+        "object": "only_person",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "insert a new person",
+      "replace the person",
+      "change face or body"
+    ],
+    "invariants": [
+      {
+        "subject": "only_person",
+        "property": "identity, face, pose, and clothing",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "hair length and newly occupied hair area",
+          "entity_ref": "only_person.hair",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "hair boundary, shoulder occlusion, and hair shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "head shape, existing hair, shoulders, and source style",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "face, identity, body, clothing, and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "attribute edit, not person insertion",
+        "source": "annotation_rule",
+        "evidence": "hair is an attribute of an existing person"
+      }
+    ],
+    "edit_scope": "local",
+    "desired_state": "long hair"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_long_hair_multiple_people",
+    "instruction": "Add long hair.",
+    "topology": "modify_attribute",
+    "operation": "modify",
+    "target": {
+      "kind": "attribute",
+      "name": "long hair",
+      "entity_type": "person",
+      "attribute_name": "hair.length",
+      "instance_ref": null,
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": null,
+      "part": "hair",
+      "relation": "attribute_of"
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "modify every person",
+      "replace or remove a person",
+      "change identity"
+    ],
+    "invariants": [
+      {
+        "subject": "all people",
+        "property": "identity and non-hair attributes",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "selected person's hair",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "local shoulders, occlusion, and shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "candidate people and existing hairstyles",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "unselected people, faces, clothing, and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "anchor.instance_ref",
+        "status": "unresolved",
+        "confidence": 0.1,
+        "description": "The person whose hair should change is unspecified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Whose hair should be made long?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "one target person requires selection",
+        "source": "annotation_rule",
+        "evidence": "minimal scoped interpretation"
+      }
+    ],
+    "edit_scope": "local",
+    "desired_state": "long hair"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_sword_ambiguous",
+    "instruction": "Add the sword.",
+    "topology": "attach_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "sword",
+      "entity_type": "sword",
+      "instance_ref": "new_sword",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": null,
+      "part": null,
+      "relation": "held_by"
+    },
+    "referring_constraints": [],
+    "required_relations": [
+      {
+        "subject": "new_sword",
+        "predicate": "held_by",
+        "object": "selected_person.selected_hand",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "duplicate swords",
+      "sword intersects arm",
+      "floating sword",
+      "face or clothing changes"
+    ],
+    "invariants": [
+      {
+        "subject": "selected_person",
+        "property": "identity, face, clothing, and pose except hand articulation",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "one new sword",
+          "entity_ref": "new_sword",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "selected hand, fingers, local occlusion, and shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "arm pose, free space, lighting, depth, and style",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "face, torso, clothing, other objects, and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "person and hand",
+        "status": "unresolved",
+        "confidence": 0.1,
+        "description": "Neither holder nor hand is specified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Which person and hand should hold the sword?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "one sword",
+        "source": "instruction",
+        "evidence": "singular noun"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_sword_right_hand",
+    "instruction": "Add exactly one sword to the man's right hand.",
+    "topology": "attach_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "sword",
+      "entity_type": "sword",
+      "instance_ref": "new_sword",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "anchor": {
+      "entity_type": "person",
+      "instance_ref": "man",
+      "part": "right_hand",
+      "relation": "held_by"
+    },
+    "referring_constraints": [
+      {
+        "field": "person",
+        "value": "man",
+        "source": "instruction",
+        "scope": "anchor"
+      },
+      {
+        "field": "hand",
+        "value": "right",
+        "source": "instruction",
+        "scope": "anchor"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_sword",
+        "predicate": "held_by",
+        "object": "man.right_hand",
+        "required": true
+      },
+      {
+        "subject": "fingers",
+        "predicate": "occlude",
+        "object": "new_sword.handle",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "more than one sword",
+      "arm intersection",
+      "floating sword",
+      "identity change"
+    ],
+    "invariants": [
+      {
+        "subject": "man",
+        "property": "identity, face, torso, clothing, and pose except fingers",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new sword",
+          "entity_ref": "new_sword",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "right hand, fingers, local occlusion, and shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "arm pose, scene lighting, and depth",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "face, identity, torso, clothing, other objects, and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "right hand anchor and exact count",
+        "source": "instruction",
+        "evidence": "explicit wording"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_boy_match_animation",
+    "instruction": "Add a boy.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "boy",
+      "entity_type": "person",
+      "instance_ref": "new_boy",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "photorealistic rendering in an animated scene",
+      "add multiple children",
+      "alter existing characters"
+    ],
+    "invariants": [
+      {
+        "subject": "source image",
+        "property": "animation domain, palette, and rendering style",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "one new boy",
+          "entity_ref": "new_boy",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "contact and local shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "character design language, palette, perspective, and available space",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "existing animated characters and background",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "style_contract": {
+      "domain": "match_source_animation",
+      "palette": "match_local_context",
+      "lighting": "match_local_context",
+      "texture": "match_source"
+    },
+    "ambiguities": [
+      {
+        "field": "placement and appearance",
+        "status": "unresolved",
+        "confidence": 0.2,
+        "description": "Only entity category is specified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "Where should the boy be placed?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "animated style",
+        "source": "image",
+        "evidence": "source-domain observation"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_boy_selected_space",
+    "instruction": "Add one boy in the empty space beside the animated group.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "boy",
+      "entity_type": "person",
+      "instance_ref": "new_boy",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [
+      {
+        "field": "placement",
+        "value": "empty space beside animated group",
+        "source": "instruction",
+        "scope": "placement"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_boy",
+        "predicate": "beside",
+        "object": "animated_group",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "second child",
+      "photorealistic style",
+      "occlude group members"
+    ],
+    "invariants": [
+      {
+        "subject": "animated_group",
+        "property": "members, identities, poses, and style",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "new boy in specified empty space",
+          "entity_ref": "new_boy",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "ground contact and shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "group scale, style, perspective, and lighting",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "group members and background outside insertion footprint",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "style_contract": {
+      "domain": "match_source_animation",
+      "palette": "match_local_context",
+      "lighting": "match_local_context",
+      "texture": "match_source"
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "placement and count",
+        "source": "instruction",
+        "evidence": "explicit wording"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_bottle_ambiguous",
+    "instruction": "Add a bottle.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "bottle",
+      "entity_type": "bottle",
+      "instance_ref": "new_bottle",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "wrong object category",
+      "implausible scale",
+      "modify unrelated people",
+      "floating bottle"
+    ],
+    "invariants": [
+      {
+        "subject": "people",
+        "property": "identity, face, clothing, and pose",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "one new bottle",
+          "entity_ref": "new_bottle",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "support contact, shadow, and local occlusion",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "candidate support surfaces, scale cues, depth, and lighting",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "all people and unrelated objects",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "bottle subtype, scale, and placement",
+        "status": "unresolved",
+        "confidence": 0.1,
+        "description": "The requested bottle is underspecified.",
+        "assumption": null
+      }
+    ],
+    "clarification": {
+      "needed": true,
+      "questions": [
+        "What kind of bottle should be added, and where?"
+      ]
+    },
+    "provenance": [
+      {
+        "claim": "exactly one bottle",
+        "source": "instruction",
+        "evidence": "singular noun"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "add_bottle_on_table",
+    "instruction": "Add one glass bottle standing on the empty part of the table.",
+    "topology": "insert_entity",
+    "operation": "add",
+    "target": {
+      "kind": "entity",
+      "name": "glass bottle",
+      "entity_type": "bottle",
+      "instance_ref": "new_bottle",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": false
+    },
+    "anchor": {
+      "entity_type": "table",
+      "instance_ref": "table",
+      "part": "empty_surface",
+      "relation": "supported_by"
+    },
+    "referring_constraints": [
+      {
+        "field": "material",
+        "value": "glass",
+        "source": "instruction",
+        "scope": "target"
+      },
+      {
+        "field": "placement",
+        "value": "empty part of table",
+        "source": "instruction",
+        "scope": "placement"
+      }
+    ],
+    "required_relations": [
+      {
+        "subject": "new_bottle",
+        "predicate": "supported_by",
+        "object": "table.surface",
+        "required": true
+      }
+    ],
+    "forbidden_outcomes": [
+      "plastic or can-like object",
+      "floating bottle",
+      "person modification"
+    ],
+    "invariants": [
+      {
+        "subject": "people and table objects",
+        "property": "appearance and position",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "glass bottle on table",
+          "entity_ref": "new_bottle",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "contact, reflection, and cast shadow",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "table plane, nearby scale cues, lighting, and depth",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "people and existing table objects",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "material, placement, and count",
+        "source": "instruction",
+        "evidence": "explicit wording"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_all_coca_cola_signs",
+    "instruction": "Remove the Coca-Cola signs.",
+    "topology": "remove_entity",
+    "operation": "remove",
+    "target": {
+      "kind": "entity",
+      "name": "Coca-Cola signs",
+      "entity_type": "sign",
+      "instance_ref": null,
+      "count": {
+        "value": null,
+        "quantifier": "all",
+        "exact": false
+      },
+      "existing": true
+    },
+    "referring_constraints": [
+      {
+        "field": "visible_text",
+        "value": "Coca-Cola",
+        "source": "instruction",
+        "scope": "target"
+      }
+    ],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "reinforce or regenerate Coca-Cola text",
+      "malformed replacement text",
+      "remove unrelated signs"
+    ],
+    "invariants": [
+      {
+        "subject": "non-target text and logos",
+        "property": "content, spelling, and geometry",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "all complete Coca-Cola sign entities",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "sign shadows, mounting traces, and boundaries",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "surface behind and around each sign",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "all other text, signs, objects, and people",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "target count",
+        "status": "inferred",
+        "confidence": 0.8,
+        "description": "Plural definite phrase is interpreted as all matching visible signs.",
+        "assumption": "Remove all visible Coca-Cola signs."
+      }
+    ],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "Coca-Cola is a grounding attribute",
+        "source": "instruction",
+        "evidence": "brand phrase identifies sign entities"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_selected_coca_cola_sign",
+    "instruction": "Remove the left Coca-Cola sign.",
+    "topology": "remove_entity",
+    "operation": "remove",
+    "target": {
+      "kind": "entity",
+      "name": "left Coca-Cola sign",
+      "entity_type": "sign",
+      "instance_ref": "left_coke_sign",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "referring_constraints": [
+      {
+        "field": "visible_text",
+        "value": "Coca-Cola",
+        "source": "instruction",
+        "scope": "target"
+      },
+      {
+        "field": "position",
+        "value": "left",
+        "source": "instruction",
+        "scope": "target"
+      }
+    ],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "remove right sign",
+      "regenerate brand text",
+      "damage neighboring text"
+    ],
+    "invariants": [
+      {
+        "subject": "right sign and all other text",
+        "property": "content and geometry",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "complete left Coca-Cola sign",
+          "entity_ref": "left_coke_sign",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "mount, shadow, and boundary",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "surface behind left sign",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "right sign and unrelated scene content",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "left sign only",
+        "source": "instruction",
+        "evidence": "explicit spatial selector"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_bird_protect_text",
+    "instruction": "Remove the bird.",
+    "topology": "remove_entity",
+    "operation": "remove",
+    "target": {
+      "kind": "entity",
+      "name": "bird",
+      "entity_type": "bird",
+      "instance_ref": "bird",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "referring_constraints": [],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "alter copyright text",
+      "leave bird fragments",
+      "blur protected lettering"
+    ],
+    "invariants": [
+      {
+        "subject": "copyright text",
+        "property": "characters, spelling, position, and sharpness",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "complete bird entity",
+          "entity_ref": "bird",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "bird shadow and silhouette boundary",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "background immediately behind bird",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "copyright text and all non-bird content",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "copyright text is protected",
+        "source": "image",
+        "evidence": "visible nearby text"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_two_men_white_shirts",
+    "instruction": "Remove two men in white shirts.",
+    "topology": "remove_entity",
+    "operation": "remove",
+    "target": {
+      "kind": "entity",
+      "name": "men wearing white shirts",
+      "entity_type": "person",
+      "instance_ref": null,
+      "count": {
+        "value": 2,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "referring_constraints": [
+      {
+        "field": "person.gender_presentation",
+        "value": "men",
+        "source": "instruction",
+        "scope": "target"
+      },
+      {
+        "field": "clothing.shirt_color",
+        "value": "white",
+        "source": "instruction",
+        "scope": "target"
+      }
+    ],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "remove or recolor shirts only",
+      "remove fewer or more than two people",
+      "alter non-target people"
+    ],
+    "invariants": [
+      {
+        "subject": "non-target people",
+        "property": "identity, clothing, pose, and count",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "two complete person entities selected by white-shirt attribute",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "their shadows, contact traces, and occlusion boundaries",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "background and objects occluded by both people",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "all non-target people and visible scene content",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "shirts are selectors, not targets",
+        "source": "annotation_rule",
+        "evidence": "entity operation binds to two men"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_handwriting_red_paper",
+    "instruction": "Remove the handwriting from the red paper.",
+    "topology": "remove_attribute",
+    "operation": "remove",
+    "target": {
+      "kind": "attribute",
+      "name": "handwriting",
+      "entity_type": "paper",
+      "attribute_name": "surface.handwriting",
+      "instance_ref": "red_paper",
+      "count": {
+        "value": null,
+        "quantifier": "all",
+        "exact": false
+      },
+      "existing": true
+    },
+    "anchor": {
+      "entity_type": "paper",
+      "instance_ref": "red_paper",
+      "part": "surface",
+      "relation": "attribute_of"
+    },
+    "referring_constraints": [
+      {
+        "field": "paper.color",
+        "value": "red",
+        "source": "instruction",
+        "scope": "anchor"
+      }
+    ],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "replace the paper",
+      "replace the whole scene",
+      "change printed text or paper geometry"
+    ],
+    "invariants": [
+      {
+        "subject": "red_paper",
+        "property": "color, shape, texture, pose, and identity",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "all handwriting strokes on red paper",
+          "entity_ref": "red_paper.handwriting",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "stroke-edge contamination only",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "clean red-paper texture adjacent to strokes",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "paper boundary, printed content, hands, and entire surrounding scene",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "handwriting is an attribute carried by paper",
+        "source": "annotation_rule",
+        "evidence": "from the red paper binds removal scope"
+      }
+    ],
+    "edit_scope": "local"
+  },
+  {
+    "schema_version": "0.2.0",
+    "contract_id": "remove_key_from_banknotes",
+    "instruction": "Remove the black antique key from the banknotes.",
+    "topology": "remove_entity",
+    "operation": "remove",
+    "target": {
+      "kind": "entity",
+      "name": "black antique key",
+      "entity_type": "key",
+      "instance_ref": "black_antique_key",
+      "count": {
+        "value": 1,
+        "quantifier": "exact",
+        "exact": true
+      },
+      "existing": true
+    },
+    "referring_constraints": [
+      {
+        "field": "color",
+        "value": "black",
+        "source": "instruction",
+        "scope": "target"
+      },
+      {
+        "field": "style",
+        "value": "antique",
+        "source": "instruction",
+        "scope": "target"
+      },
+      {
+        "field": "support",
+        "value": "banknotes",
+        "source": "instruction",
+        "scope": "target"
+      }
+    ],
+    "required_relations": [],
+    "forbidden_outcomes": [
+      "distort banknote texture",
+      "invent malformed currency text",
+      "leave key fragments or shadow"
+    ],
+    "invariants": [
+      {
+        "subject": "visible banknotes outside reconstruction area",
+        "property": "lines, portrait, text, denomination, color, and geometry",
+        "tolerance": "strict"
+      }
+    ],
+    "region_roles": {
+      "target": [
+        {
+          "description": "complete black antique key",
+          "entity_ref": "black_antique_key",
+          "mask_status": "pending"
+        }
+      ],
+      "dependent": [
+        {
+          "description": "key shadow, contact trace, and silhouette boundary",
+          "mask_status": "pending"
+        }
+      ],
+      "context": [
+        {
+          "description": "neighboring banknote texture, lines, portraits, and text",
+          "mask_status": "not_requested"
+        }
+      ],
+      "protected": [
+        {
+          "description": "all visible banknote content outside necessary reconstruction",
+          "mask_status": "pending"
+        }
+      ]
+    },
+    "ambiguities": [
+      {
+        "field": "occluded banknote content",
+        "status": "inferred",
+        "confidence": 0.2,
+        "description": "Exact hidden print is not observable and must be reconstructed conservatively.",
+        "assumption": "Continue only locally supported banknote structure."
+      }
+    ],
+    "clarification": {
+      "needed": false,
+      "questions": []
+    },
+    "provenance": [
+      {
+        "claim": "key is entity target and banknotes are support/context",
+        "source": "instruction",
+        "evidence": "remove key from banknotes"
+      }
+    ],
+    "edit_scope": "local"
+  }
+]

@@ -1,0 +1,144 @@
+{
+  "index": 2,
+  "omni_edit_id": "task_obj_remove_631840",
+  "task": "removal",
+  "prompt": "Remove a large, gray military transport aircraft on the tarmac.",
+  "all_prompts": [
+    "Remove airplane",
+    "Remove a large, gray military transport aircraft on the tarmac."
+  ],
+  "seed": 304897403,
+  "pipeline_mode": "plan-only",
+  "execution": {
+    "status": "not_requested",
+    "backend": null,
+    "executed_prompt": null,
+    "requires_mask": true,
+    "mask_path": null,
+    "result_path": null,
+    "latency_ms": null,
+    "error": null,
+    "verification_status": "not_run"
+  },
+  "task_raw": "removal",
+  "task_normalized": "removal",
+  "planning": {
+    "status": "ready",
+    "ready": true,
+    "planner": "rule",
+    "model": null,
+    "latency_ms": 6.9,
+    "contract_schema_version": "0.2.0",
+    "task_raw": "removal",
+    "task_normalized": "removal",
+    "task_compatibility": {
+      "expected_topologies": [
+        "remove_attribute",
+        "remove_entity"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_remove_a_large_gray_military_transport_aircra_4cab8e73",
+      "instruction": "Remove a large, gray military transport aircraft on the tarmac.",
+      "topology": "remove_entity",
+      "operation": "remove",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "large gray military transport aircraft",
+        "entity_type": "aircraft",
+        "instance_ref": "large_gray_military_transport_aircraft",
+        "count": {
+          "value": 1,
+          "quantifier": "exact",
+          "exact": true
+        },
+        "existing": true
+      },
+      "referring_constraints": [
+        {
+          "field": "appearance.color",
+          "value": "gray",
+          "source": "instruction",
+          "scope": "target"
+        }
+      ],
+      "required_relations": [
+        {
+          "subject": "large_gray_military_transport_aircraft",
+          "predicate": "related_to",
+          "object": "tarmac",
+          "required": true
+        }
+      ],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "large gray military transport aircraft",
+            "entity_ref": "large_gray_military_transport_aircraft",
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [],
+      "clarification": {
+        "needed": false,
+        "questions": []
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as remove",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as remove_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ],
+      "source_state": "large gray military transport aircraft",
+      "anchor": {
+        "entity_type": "tarmac",
+        "instance_ref": "tarmac",
+        "part": null,
+        "relation": "related_to"
+      }
+    }
+  }
+}

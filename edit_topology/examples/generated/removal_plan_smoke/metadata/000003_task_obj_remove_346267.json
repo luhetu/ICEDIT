@@ -1,0 +1,118 @@
+{
+  "index": 3,
+  "omni_edit_id": "task_obj_remove_346267",
+  "task": "removal",
+  "prompt": "Remove yellow curtains",
+  "all_prompts": [
+    "Remove yellow curtains",
+    "Remove long, mustard yellow curtains to the windows."
+  ],
+  "seed": 304897404,
+  "pipeline_mode": "plan-only",
+  "task_raw": "removal",
+  "task_normalized": "removal",
+  "planning": {
+    "status": "ready",
+    "ready": true,
+    "planner": "rule",
+    "model": null,
+    "task_raw": "removal",
+    "task_normalized": "removal",
+    "task_compatibility": {
+      "expected_topologies": [
+        "remove_attribute",
+        "remove_entity"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_remove_yellow_curtains_6d42c7eb",
+      "instruction": "Remove yellow curtains",
+      "topology": "remove_entity",
+      "operation": "remove",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "yellow curtains",
+        "entity_type": "curtains",
+        "instance_ref": null,
+        "count": {
+          "value": null,
+          "quantifier": "all",
+          "exact": false
+        },
+        "existing": true
+      },
+      "referring_constraints": [
+        {
+          "field": "appearance.color",
+          "value": "yellow",
+          "source": "instruction",
+          "scope": "target"
+        }
+      ],
+      "required_relations": [],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "yellow curtains",
+            "entity_ref": null,
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [],
+      "clarification": {
+        "needed": false,
+        "questions": []
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as remove",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as remove_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ],
+      "source_state": "yellow curtains"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+[
+  {
+    "case_id": "add_sword_to_hand",
+    "source": "dataset_outputs/omni_mini_shard_00000/source/000048_task_obj_add_505100.png",
+    "reference": "dataset_outputs/omni_mini_shard_00000/reference/000048_task_obj_add_505100.png",
+    "old_output": "dataset_outputs/omni_mini_shard_00000/generated/000048_task_obj_add_505100.png",
+    "instruction": "Add exactly one silver sword with a dark hilt to the man's right hand."
+  },
+  {
+    "case_id": "remove_antique_key",
+    "source": "dataset_outputs/omni_removal_shard_00115/source/000001_task_obj_remove_64196.png",
+    "reference": "dataset_outputs/omni_removal_shard_00115/reference/000001_task_obj_remove_64196.png",
+    "old_output": "dataset_outputs/omni_removal_shard_00115/generated/000001_task_obj_remove_64196.png",
+    "instruction": "Remove only the black antique key on top of the currency notes in the foreground. Keep all banknotes unchanged."
+  },
+  {
+    "case_id": "remove_two_men",
+    "source": "dataset_outputs/omni_removal_shard_00115/source/000015_task_obj_remove_859102.png",
+    "reference": "dataset_outputs/omni_removal_shard_00115/reference/000015_task_obj_remove_859102.png",
+    "old_output": "dataset_outputs/omni_removal_shard_00115/generated/000015_task_obj_remove_859102.png",
+    "instruction": "Remove only the two men in white shirts sitting on stools in the foreground on the right. Keep all other people unchanged."
+  },
+  {
+    "case_id": "remove_coca_cola_signs",
+    "source": "dataset_outputs/omni_removal_shard_00115/source/000262_task_obj_remove_890239.png",
+    "reference": "dataset_outputs/omni_removal_shard_00115/reference/000262_task_obj_remove_890239.png",
+    "old_output": "dataset_outputs/omni_removal_shard_00115/generated/000262_task_obj_remove_890239.png",
+    "target_boxes": [[180, 0, 370, 55], [190, 155, 245, 200]],
+    "fill_prompt": "A photorealistic continuation of the modern building facade, with gray stone panels, glass windows, and natural reflections matching the surrounding architecture.",
+    "instruction": "Remove only the large Coca-Cola and Coca-Cola Zero signs on the building in the background. Keep the building and all other text unchanged."
+  },
+  {
+    "case_id": "remove_bird_from_hand",
+    "source": "dataset_outputs/omni_removal_shard_00115/source/001523_task_obj_remove_535441.png",
+    "reference": "dataset_outputs/omni_removal_shard_00115/reference/001523_task_obj_remove_535441.png",
+    "old_output": "dataset_outputs/omni_removal_shard_00115/generated/001523_task_obj_remove_535441.png",
+    "instruction": "Remove only the small blue bird perched on the woman's hand. Keep the woman, her hand, identity, clothes, and background unchanged."
+  }
+]

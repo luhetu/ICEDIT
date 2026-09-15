@@ -1,0 +1,131 @@
+{
+  "index": 0,
+  "omni_edit_id": "task_obj_add_716056",
+  "task": "addition",
+  "prompt": "Add two small pavilions in the middle ground, just beyond the riverbank.",
+  "all_prompts": [
+    "Add nested building",
+    "Add two small pavilions in the middle ground, just beyond the riverbank."
+  ],
+  "seed": 304897401,
+  "pipeline_mode": "plan-only",
+  "execution": {
+    "status": "not_requested",
+    "backend": null,
+    "executed_prompt": null,
+    "requires_mask": false,
+    "mask_path": null,
+    "result_path": null,
+    "latency_ms": null,
+    "error": null,
+    "verification_status": "not_run"
+  },
+  "task_raw": "addition",
+  "task_normalized": "addition",
+  "planning": {
+    "status": "ready",
+    "ready": true,
+    "planner": "rule",
+    "model": null,
+    "latency_ms": 42.29,
+    "contract_schema_version": "0.2.0",
+    "task_raw": "addition",
+    "task_normalized": "addition",
+    "task_compatibility": {
+      "expected_topologies": [
+        "attach_entity",
+        "insert_entity",
+        "modify_attribute"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_add_two_small_pavilions_in_the_middle_ground_e406889a",
+      "instruction": "Add two small pavilions in the middle ground, just beyond the riverbank.",
+      "topology": "insert_entity",
+      "operation": "add",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "small pavilions",
+        "entity_type": "pavilions",
+        "instance_ref": "new_pavilions",
+        "count": {
+          "value": 2,
+          "quantifier": "exact",
+          "exact": true
+        },
+        "existing": false
+      },
+      "referring_constraints": [
+        {
+          "field": "position",
+          "value": "middle_ground",
+          "source": "instruction",
+          "scope": "placement"
+        }
+      ],
+      "required_relations": [],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "small pavilions",
+            "entity_ref": "new_pavilions",
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [],
+      "clarification": {
+        "needed": false,
+        "questions": []
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as add",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as insert_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ]
+    }
+  }
+}

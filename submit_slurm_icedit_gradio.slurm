@@ -1,0 +1,48 @@
+#!/bin/bash
+#SBATCH --gres=gpu:AA_A6000_0:1
+#SBATCH -p gpu-bigmem
+#SBATCH --qos=long-high-prio
+#SBATCH --time=6-23:59:59
+#SBATCH -J icedit_gradio
+#SBATCH -o logs/%x%j.out
+#SBATCH --error=logs/%x%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dnrx52@durham.ac.uk
+
+if command -v module >/dev/null 2>&1; then
+    module load cuda/11.1
+fi
+
+mkdir -p logs
+cd /home3/dnrx52/ICEdit
+
+if [[ -f .env ]]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env
+    set +a
+fi
+
+PYTHON=/home3/dnrx52/.venvs/icedit/bin/python
+PORT=${1:-7860}
+
+FLUX_PATH=/home3/dnrx52/ICEdit/models/flux.1-fill-dev
+LORA_PATH=/home3/dnrx52/ICEdit/models/ICEdit-normal-LoRA
+
+echo "Python: $PYTHON"
+$PYTHON -c "import sys; print('sys.executable:', sys.executable); import torch; print('cuda:', torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else '')"
+
+if [[ ! -d "${FLUX_PATH}" ]]; then
+    echo "错误: 未找到 Flux 模型，请先运行: bash scripts/finish_setup.sh"
+    exit 1
+fi
+
+echo "Gradio 节点: ${SLURMD_NODENAME}  端口: ${PORT}"
+echo "SSH 端口转发: ssh -L ${PORT}:${SLURMD_NODENAME}:${PORT} ${USER}@$(hostname -f)"
+echo "浏览器打开: http://127.0.0.1:${PORT}"
+
+$PYTHON scripts/gradio_demo.py \
+    --server_name 0.0.0.0 \
+    --port "${PORT}" \
+    --flux-path "${FLUX_PATH}" \
+    --lora-path "${LORA_PATH}"

@@ -33,6 +33,14 @@
 
 <div align="left">
 
+## Edit Topology extension
+
+This workspace includes an experimental topology-aware planner and spatial
+executor for minimal-change editing. See
+[`edit_topology/PROJECT_GUIDE.md`](edit_topology/PROJECT_GUIDE.md) for the system
+architecture, installation, private API-key setup, tests, cluster launch steps,
+planned-edit workflow, instruction examples, and current limitations.
+
 
 # 🎆 News 
 - **[2025/9/19]** 🔥 We have open-sourced our [MoE version ICEdit and ckpt](#for-the-usage-of-moe-lora-version). Have a try!🚀

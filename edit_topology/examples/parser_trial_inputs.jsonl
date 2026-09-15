@@ -1,0 +1,9 @@
+{"source_image":"examples/images/hat_people.png","instruction":"Add a hat to the man on the left."}
+{"source_image":"examples/images/table_scene.png","instruction":"Add one glass bottle standing on the empty part of the table."}
+{"source_image":"examples/images/red_paper.png","instruction":"Remove the handwriting from the red paper."}
+{"source_image":"examples/images/street.png","instruction":"Remove two men in white shirts."}
+{"source_image":"examples/images/person.png","instruction":"Add long hair."}
+{"source_image":"examples/images/table_scene.png","instruction":"Replace the red cup with a blue ceramic mug.","task":"swap"}
+{"source_image":"examples/images/street.png","instruction":"Replace the background with a snowy mountain landscape.","task":"swap"}
+{"source_image":"examples/images/street.png","instruction":"Make the whole scene rainy.","task":"env"}
+{"source_image":"examples/images/street.png","instruction":"Apply watercolor style to the whole image.","task":"style"}

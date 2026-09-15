@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/edit-topology/0.2.0/edit-topology-contract.schema.json",
+  "title": "Edit Topology Contract",
+  "description": "A planner contract for the smallest valid scene transformation required by an image-edit instruction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "instruction", "topology", "operation", "edit_scope", "target", "referring_constraints", "required_relations", "forbidden_outcomes", "invariants", "region_roles", "ambiguities", "clarification", "provenance"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "contract_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,79}$"},
+    "source_image": {"type": "string", "minLength": 1},
+    "instruction": {"type": "string", "minLength": 1},
+    "topology": {"enum": ["insert_entity", "attach_entity", "modify_attribute", "remove_entity", "remove_attribute", "replace_entity", "replace_background", "modify_environment", "apply_style"]},
+    "operation": {"enum": ["add", "modify", "remove", "replace"]},
+    "edit_scope": {"enum": ["local", "regional", "global"]},
+    "target": {"$ref": "#/$defs/target"},
+    "replacement": {"$ref": "#/$defs/target"},
+    "anchor": {"$ref": "#/$defs/anchor"},
+    "source_state": {"type": ["string", "null"]},
+    "desired_state": {"type": "string", "minLength": 1},
+    "referring_constraints": {"type": "array", "items": {"$ref": "#/$defs/referringConstraint"}, "uniqueItems": true},
+    "required_relations": {"type": "array", "items": {"$ref": "#/$defs/relation"}},
+    "forbidden_outcomes": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "invariants": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/invariant"}},
+    "region_roles": {"$ref": "#/$defs/regionRoles"},
+    "style_contract": {"$ref": "#/$defs/styleContract"},
+    "ambiguities": {"type": "array", "items": {"$ref": "#/$defs/ambiguity"}},
+    "clarification": {"$ref": "#/$defs/clarification"},
+    "provenance": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/provenance"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"topology": {"enum": ["insert_entity", "attach_entity"]}}, "required": ["topology"]},
+      "then": {"properties": {"operation": {"const": "add"}, "edit_scope": {"const": "local"}, "target": {"properties": {"kind": {"const": "entity"}, "existing": {"const": false}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "modify_attribute"}}, "required": ["topology"]},
+      "then": {"required": ["desired_state"], "properties": {"operation": {"const": "modify"}, "edit_scope": {"const": "local"}, "target": {"properties": {"kind": {"const": "attribute"}, "existing": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "remove_entity"}}, "required": ["topology"]},
+      "then": {"properties": {"operation": {"const": "remove"}, "edit_scope": {"const": "local"}, "target": {"properties": {"kind": {"const": "entity"}, "existing": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "remove_attribute"}}, "required": ["topology"]},
+      "then": {"properties": {"operation": {"const": "remove"}, "edit_scope": {"const": "local"}, "target": {"properties": {"kind": {"const": "attribute"}, "existing": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "replace_entity"}}, "required": ["topology"]},
+      "then": {"required": ["replacement", "desired_state"], "properties": {"operation": {"const": "replace"}, "edit_scope": {"const": "local"}, "target": {"properties": {"kind": {"const": "entity"}, "existing": {"const": true}}}, "replacement": {"properties": {"kind": {"const": "entity"}, "existing": {"const": false}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "replace_background"}}, "required": ["topology"]},
+      "then": {"required": ["replacement", "desired_state"], "properties": {"operation": {"const": "replace"}, "edit_scope": {"const": "regional"}, "target": {"properties": {"kind": {"const": "entity"}, "entity_type": {"const": "background"}, "existing": {"const": true}}}, "replacement": {"properties": {"kind": {"const": "entity"}, "entity_type": {"const": "background"}, "existing": {"const": false}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "modify_environment"}}, "required": ["topology"]},
+      "then": {"required": ["desired_state"], "properties": {"operation": {"const": "modify"}, "edit_scope": {"const": "global"}, "target": {"properties": {"kind": {"const": "attribute"}, "existing": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"const": "apply_style"}}, "required": ["topology"]},
+      "then": {"required": ["desired_state"], "properties": {"operation": {"const": "modify"}, "edit_scope": {"enum": ["regional", "global"]}, "target": {"properties": {"kind": {"const": "attribute"}, "existing": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"topology": {"enum": ["attach_entity", "modify_attribute", "remove_attribute"]}}, "required": ["topology"]},
+      "then": {"required": ["anchor"]}
+    }
+  ],
+  "$defs": {
+    "count": {
+      "type": "object", "additionalProperties": false, "required": ["value", "quantifier", "exact"],
+      "properties": {"value": {"type": ["integer", "null"], "minimum": 1}, "quantifier": {"enum": ["exact", "all", "unspecified"]}, "exact": {"type": "boolean"}},
+      "allOf": [
+        {"if": {"properties": {"quantifier": {"const": "exact"}}, "required": ["quantifier"]}, "then": {"properties": {"value": {"type": "integer"}, "exact": {"const": true}}}},
+        {"if": {"properties": {"quantifier": {"enum": ["all", "unspecified"]}}, "required": ["quantifier"]}, "then": {"properties": {"value": {"type": "null"}, "exact": {"const": false}}}}
+      ]
+    },
+    "target": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "name", "existing", "count"],
+      "properties": {"kind": {"enum": ["entity", "attribute"]}, "name": {"type": "string", "minLength": 1}, "entity_type": {"type": "string", "minLength": 1}, "attribute_name": {"type": "string", "minLength": 1}, "instance_ref": {"type": ["string", "null"]}, "count": {"$ref": "#/$defs/count"}, "existing": {"type": "boolean"}},
+      "allOf": [{"if": {"properties": {"kind": {"const": "entity"}}, "required": ["kind"]}, "then": {"required": ["entity_type"]}}, {"if": {"properties": {"kind": {"const": "attribute"}}, "required": ["kind"]}, "then": {"required": ["entity_type", "attribute_name"]}}]
+    },
+    "anchor": {
+      "type": "object", "additionalProperties": false, "required": ["entity_type", "instance_ref"],
+      "properties": {"entity_type": {"type": "string", "minLength": 1}, "instance_ref": {"type": ["string", "null"]}, "part": {"type": ["string", "null"]}, "relation": {"type": ["string", "null"]}}
+    },
+    "referringConstraint": {
+      "type": "object", "additionalProperties": false, "required": ["field", "value", "source", "scope"],
+      "properties": {"field": {"type": "string", "minLength": 1}, "value": {"type": ["string", "number", "boolean"]}, "source": {"enum": ["instruction", "image", "user_input", "default"]}, "scope": {"enum": ["target", "anchor", "placement", "scene", "replacement"]}}
+    },
+    "relation": {
+      "type": "object", "additionalProperties": false, "required": ["subject", "predicate", "object"],
+      "properties": {"subject": {"type": "string", "minLength": 1}, "predicate": {"type": "string", "minLength": 1}, "object": {"type": "string", "minLength": 1}, "required": {"type": "boolean", "default": true}}
+    },
+    "invariant": {
+      "type": "object", "additionalProperties": false, "required": ["subject", "property"],
+      "properties": {"subject": {"type": "string", "minLength": 1}, "property": {"type": "string", "minLength": 1}, "tolerance": {"enum": ["strict", "local_coherence", "semantic"]}}
+    },
+    "regionRef": {
+      "type": "object", "additionalProperties": false, "required": ["description"],
+      "properties": {"description": {"type": "string", "minLength": 1}, "entity_ref": {"type": ["string", "null"]}, "mask_uri": {"type": ["string", "null"]}, "mask_status": {"enum": ["not_requested", "pending", "provided", "grounded"]}}
+    },
+    "regionRoles": {
+      "type": "object", "additionalProperties": false, "required": ["target", "dependent", "context", "protected"],
+      "properties": {
+        "target": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/regionRef"}},
+        "dependent": {"type": "array", "items": {"$ref": "#/$defs/regionRef"}},
+        "context": {"type": "array", "items": {"$ref": "#/$defs/regionRef"}},
+        "protected": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/regionRef"}}
+      }
+    },
+    "styleContract": {
+      "type": "object", "additionalProperties": false, "required": ["domain", "palette", "lighting", "texture"],
+      "properties": {"domain": {"type": "string", "minLength": 1}, "palette": {"type": "string", "minLength": 1}, "lighting": {"type": "string", "minLength": 1}, "texture": {"type": "string", "minLength": 1}}
+    },
+    "ambiguity": {
+      "type": "object", "additionalProperties": false, "required": ["field", "status", "confidence", "description"],
+      "properties": {"field": {"type": "string", "minLength": 1}, "status": {"enum": ["resolved", "inferred", "unresolved"]}, "confidence": {"type": "number", "minimum": 0, "maximum": 1}, "description": {"type": "string", "minLength": 1}, "assumption": {"type": ["string", "null"]}}
+    },
+    "clarification": {
+      "type": "object", "additionalProperties": false, "required": ["needed", "questions"],
+      "properties": {"needed": {"type": "boolean"}, "questions": {"type": "array", "items": {"type": "string", "minLength": 1}}},
+      "allOf": [{"if": {"properties": {"needed": {"const": true}}, "required": ["needed"]}, "then": {"properties": {"questions": {"minItems": 1}}}}]
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["claim", "source"],
+      "properties": {"claim": {"type": "string", "minLength": 1}, "source": {"enum": ["instruction", "image", "user_input", "default", "annotation_rule"]}, "evidence": {"type": ["string", "null"]}}
+    }
+  }
+}

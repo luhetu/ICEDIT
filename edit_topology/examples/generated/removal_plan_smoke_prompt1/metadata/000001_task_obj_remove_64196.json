@@ -1,0 +1,156 @@
+{
+  "index": 1,
+  "omni_edit_id": "task_obj_remove_64196",
+  "task": "removal",
+  "prompt": "Remove a black antique key placed on top of the currency notes in the foreground.",
+  "all_prompts": [
+    "Remove the ring of the key",
+    "Remove a black antique key placed on top of the currency notes in the foreground."
+  ],
+  "seed": 304897402,
+  "pipeline_mode": "plan-only",
+  "execution": {
+    "status": "not_requested",
+    "backend": null,
+    "executed_prompt": null,
+    "requires_mask": true,
+    "mask_path": null,
+    "result_path": null,
+    "latency_ms": null,
+    "error": null,
+    "verification_status": "not_run"
+  },
+  "task_raw": "removal",
+  "task_normalized": "removal",
+  "planning": {
+    "status": "ready",
+    "ready": true,
+    "planner": "rule",
+    "model": null,
+    "latency_ms": 7.09,
+    "contract_schema_version": "0.2.0",
+    "task_raw": "removal",
+    "task_normalized": "removal",
+    "task_compatibility": {
+      "expected_topologies": [
+        "remove_attribute",
+        "remove_entity"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_remove_a_black_antique_key_placed_on_top_of_t_62647a6b",
+      "instruction": "Remove a black antique key placed on top of the currency notes in the foreground.",
+      "topology": "remove_entity",
+      "operation": "remove",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "black antique key",
+        "entity_type": "key",
+        "instance_ref": "black_antique_key",
+        "count": {
+          "value": 1,
+          "quantifier": "exact",
+          "exact": true
+        },
+        "existing": true
+      },
+      "referring_constraints": [
+        {
+          "field": "appearance.color",
+          "value": "black",
+          "source": "instruction",
+          "scope": "target"
+        },
+        {
+          "field": "appearance.material",
+          "value": "antique",
+          "source": "instruction",
+          "scope": "target"
+        },
+        {
+          "field": "position",
+          "value": "foreground",
+          "source": "instruction",
+          "scope": "anchor"
+        }
+      ],
+      "required_relations": [
+        {
+          "subject": "black_antique_key",
+          "predicate": "related_to",
+          "object": "top_of_the_currency_notes_in_the_foreground",
+          "required": true
+        }
+      ],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "black antique key",
+            "entity_ref": "black_antique_key",
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [],
+      "clarification": {
+        "needed": false,
+        "questions": []
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as remove",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as remove_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ],
+      "source_state": "black antique key",
+      "anchor": {
+        "entity_type": "notes",
+        "instance_ref": "top_of_the_currency_notes_in_the_foreground",
+        "part": null,
+        "relation": "related_to"
+      }
+    }
+  }
+}

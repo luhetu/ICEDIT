@@ -4,22 +4,48 @@ python scripts/gradio_demo.py
 
 import sys
 import os
-# workspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../icedit"))
+workspace_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-# if workspace_dir not in sys.path:
-#     sys.path.insert(0, workspace_dir)
+if workspace_dir not in sys.path:
+    sys.path.insert(0, workspace_dir)
     
 from diffusers import FluxFillPipeline, FluxTransformer2DModel, GGUFQuantizationConfig
 import gradio as gr
 import numpy as np
 import torch
-import spaces
 import argparse
+import json
 import random 
+import time
 from diffusers import FluxFillPipeline
 from PIL import Image
 
+from edit_topology.model_parser import ModelContractError, parse_with_model
+from edit_topology.parser import parse_instruction, validate_contract
+from edit_topology.demo_templates import PROMPT_TEMPLATES, template_prompt
+from edit_topology.executor import (
+    ContractExecutionError,
+    compile_contract_prompt,
+    load_contract,
+    validate_execution_inputs,
+)
+from edit_topology.spatial_mask import (
+    composite_spatial_result,
+    painted_mask,
+    prepare_diptych,
+)
+
 from transformers import T5EncoderModel
+
+try:
+    import spaces
+except ImportError:
+    class _LocalSpaces:
+        @staticmethod
+        def GPU(function):
+            return function
+
+    spaces = _LocalSpaces()
 
 MAX_SEED = np.iinfo(np.int32).max
 MAX_IMAGE_SIZE = 1024
@@ -38,49 +64,57 @@ parser.add_argument("--text_encoder_2", type=str, default=None, help="The gguf m
 parser.add_argument("--enable-model-cpu-offload", action="store_true", help="Enable CPU offloading for the model")
 args = parser.parse_args()
 
-if args.transformer:
-    args.transformer = os.path.abspath(args.transformer)
-    transformer = FluxTransformer2DModel.from_single_file(
-        args.transformer,
-        config="scripts/config.json",
-        quantization_config=GGUFQuantizationConfig(compute_dtype=torch.bfloat16),
-        torch_dtype=torch.bfloat16,
-    )
-else:
-    transformer = FluxTransformer2DModel.from_pretrained(
-        args.flux_path, 
-        subfolder="transformer",
-        torch_dtype=torch.bfloat16,
-    )
+pipe = None
 
-if args.text_encoder_2:
-    args.text_encoder_2 = os.path.abspath(args.text_encoder_2)
-    text_encoder_2 = T5EncoderModel.from_pretrained(
+
+def load_model_pipeline():
+    """Load the GPU pipeline only when the runnable app starts."""
+
+    global pipe
+    if pipe is not None:
+        return pipe
+
+    if args.transformer:
+        transformer = FluxTransformer2DModel.from_single_file(
+            os.path.abspath(args.transformer),
+            config="scripts/config.json",
+            quantization_config=GGUFQuantizationConfig(compute_dtype=torch.bfloat16),
+            torch_dtype=torch.bfloat16,
+        )
+    else:
+        transformer = FluxTransformer2DModel.from_pretrained(
+            args.flux_path,
+            subfolder="transformer",
+            torch_dtype=torch.bfloat16,
+        )
+
+    if args.text_encoder_2:
+        text_encoder_2 = T5EncoderModel.from_pretrained(
+            args.flux_path,
+            subfolder="text_encoder_2",
+            gguf_file=os.path.abspath(args.text_encoder_2),
+            torch_dtype=torch.bfloat16,
+        )
+    else:
+        text_encoder_2 = T5EncoderModel.from_pretrained(
+            args.flux_path,
+            subfolder="text_encoder_2",
+            torch_dtype=torch.bfloat16,
+        )
+
+    pipe = FluxFillPipeline.from_pretrained(
         args.flux_path,
-        subfolder="text_encoder_2",
-        gguf_file=f"{args.text_encoder_2}",
+        transformer=transformer,
+        text_encoder_2=text_encoder_2,
         torch_dtype=torch.bfloat16,
     )
-else:
-    text_encoder_2 = T5EncoderModel.from_pretrained(
-        args.flux_path,
-        subfolder="text_encoder_2",
-        torch_dtype=torch.bfloat16,
-    )
-
-pipe = FluxFillPipeline.from_pretrained(
-    args.flux_path, 
-    transformer=transformer, 
-    text_encoder_2=text_encoder_2, 
-    torch_dtype=torch.bfloat16
-)
-pipe.load_lora_weights(args.lora_path, adapter_name="icedit")
-pipe.set_adapters("icedit", 1.0)
-
-if args.enable_model_cpu_offload:
-    pipe.enable_model_cpu_offload()
-else:
-    pipe = pipe.to("cuda")
+    pipe.load_lora_weights(args.lora_path, adapter_name="icedit")
+    pipe.set_adapters("icedit", 1.0)
+    if args.enable_model_cpu_offload:
+        pipe.enable_model_cpu_offload()
+    else:
+        pipe = pipe.to("cuda")
+    return pipe
 
 
 @spaces.GPU
@@ -93,9 +127,16 @@ def infer(edit_images,
           guidance_scale=50,
           num_inference_steps=28,
           lora_scale=1.0,
+          edit_mask=None,
+          native_fill=False,
           progress=gr.Progress(track_tqdm=True)):
 
     global current_lora_scale
+
+    if pipe is None:
+        raise gr.Error("The image-generation pipeline is not loaded.")
+    if edit_images is None:
+        raise gr.Error("Upload a source image before generation.")
     
     if lora_scale != current_lora_scale:
         print(f"\033[93m[INFO] LoRA scale changed from {current_lora_scale} to {lora_scale}, reloading LoRA weights\033[0m")
@@ -116,29 +157,55 @@ def infer(edit_images,
     image = image.convert("RGB")
     width, height = image.size
     image = image.resize((512, int(512 * height / width)))
-    combined_image = Image.new("RGB", (width * 2, height))
-    combined_image.paste(image, (0, 0))
-    mask_array = np.zeros((height, width * 2), dtype=np.uint8)
-    mask_array[:, width:] = 255
-    mask = Image.fromarray(mask_array)
-    instruction = f'A diptych with two side-by-side images of the same scene. On the right, the scene is exactly the same as on the left but {prompt}'
-
     if randomize_seed:
         seed = random.randint(0, MAX_SEED)
 
-    image = pipe(
-        prompt=instruction,
-        image=combined_image,
-        mask_image=mask,
-        height=height,
-        width=width * 2,
-        guidance_scale=guidance_scale,
-        num_inference_steps=num_inference_steps,
-        generator=torch.Generator().manual_seed(seed),
-    ).images[0]
-
-    w, h = image.size
-    image = image.crop((w // 2, 0, w, h))
+    if native_fill:
+        if edit_mask is None:
+            raise gr.Error("Native removal requires a target mask.")
+        mask = edit_mask.convert("L").resize(image.size, Image.Resampling.NEAREST)
+        source_for_composite = image.copy()
+        mask_for_composite = mask.copy()
+        pipe.disable_lora()
+        try:
+            generated = pipe(
+                prompt=prompt,
+                image=image.copy(),
+                mask_image=mask.copy(),
+                height=height,
+                width=width,
+                guidance_scale=guidance_scale,
+                num_inference_steps=num_inference_steps,
+                generator=torch.Generator().manual_seed(seed),
+            ).images[0]
+        finally:
+            pipe.enable_lora()
+        image = composite_spatial_result(
+            source_for_composite, generated, mask_for_composite
+        )
+    else:
+        source_for_composite = image.copy()
+        combined_image, mask = prepare_diptych(image, edit_mask)
+        instruction = (
+            "A diptych with two side-by-side images of the same scene. On the "
+            f"right, the scene is exactly the same as on the left but {prompt}"
+        )
+        image = pipe(
+            prompt=instruction,
+            image=combined_image,
+            mask_image=mask,
+            height=height,
+            width=width * 2,
+            guidance_scale=guidance_scale,
+            num_inference_steps=num_inference_steps,
+            generator=torch.Generator().manual_seed(seed),
+        ).images[0]
+        w, h = image.size
+        image = image.crop((w // 2, 0, w, h))
+        if edit_mask is not None:
+            image = composite_spatial_result(
+                source_for_composite, image, edit_mask
+            )
 
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -146,6 +213,262 @@ def infer(edit_images,
     image.save(f"{args.output_dir}/result_{index}.png")
 
     return image, seed
+
+
+def plan_edit_contract(edit_image, instruction, planner_provider, planner_model):
+    """Plan one edit without running diffusion or making hidden retries."""
+    instruction = (instruction or "").strip()
+    if not instruction:
+        return "", "❌ Enter an edit instruction first."
+
+    try:
+        if planner_provider == "Local rules (no image/API)":
+            contract = parse_instruction(instruction)
+            selected = "rule-based baseline"
+        else:
+            provider = "openai" if planner_provider == "OpenAI VLM" else "gemini"
+            contract, selected = parse_with_model(
+                edit_image,
+                instruction,
+                provider=provider,
+                model=planner_model,
+            )
+        errors = validate_contract(contract)
+        if errors:
+            return json.dumps(contract, ensure_ascii=False, indent=2), (
+                "❌ Contract failed local validation: " + " | ".join(errors[:3])
+            )
+        target = contract["target"]["name"]
+        questions = contract["clarification"]["questions"]
+        if contract["clarification"]["needed"]:
+            status = (
+                f"Contract schema valid · planner: `{selected}` · topology: "
+                f"`{contract['topology']}` · target: `{target}`. "
+                "Execution status: `blocked_by_plan`. "
+                f"Clarification required: {' | '.join(questions)}"
+            )
+            return json.dumps(contract, ensure_ascii=False, indent=2), status
+        status = (
+            f"✅ Schema valid · planner: `{selected}` · topology: "
+            f"`{contract['topology']}` · target: `{target}`."
+            " No clarification needed. Use Proceed to run this contract."
+        )
+        return json.dumps(contract, ensure_ascii=False, indent=2), status
+    except (ValueError, ModelContractError) as exc:
+        return "", f"❌ Planner error: {exc}"
+    except Exception as exc:
+        return "", f"❌ Unexpected planner error: {type(exc).__name__}: {exc}"
+
+
+def load_contract_for_instruction(contract_payload, current_instruction):
+    """Reject a valid but stale contract before it reaches image generation."""
+
+    contract = load_contract(contract_payload)
+    current_instruction = (current_instruction or "").strip()
+    if not current_instruction:
+        raise ContractExecutionError("Enter the current edit instruction before execution.")
+    if contract["instruction"].strip() != current_instruction:
+        raise ContractExecutionError(
+            "The instruction changed after this contract was planned. Plan it again "
+            "before execution."
+        )
+    return contract
+
+
+def invalidate_plan_state(reason):
+    """Clear all outputs that could otherwise be mistaken for the current plan."""
+
+    planner_message = f"{reason} Plan the current input before planned execution."
+    executor_message = (
+        "Execution status: `not_requested`. Verification status: `not_run`."
+    )
+    return "", planner_message, None, [], executor_message
+
+
+def reset_after_image_change(image):
+    return (
+        initialize_mask_editor(image),
+        *invalidate_plan_state("Source image changed."),
+    )
+
+
+def infer_original_with_status(
+    edit_image,
+    instruction,
+    seed=666,
+    randomize_seed=False,
+    width=1024,
+    height=1024,
+    guidance_scale=50,
+    num_inference_steps=28,
+    lora_scale=1.0,
+):
+    """Run the upstream raw path while reporting its unverified state honestly."""
+
+    result_image, actual_seed = infer(
+        edit_image,
+        instruction,
+        seed,
+        randomize_seed,
+        width,
+        height,
+        guidance_scale,
+        num_inference_steps,
+        lora_scale,
+    )
+    status = (
+        f"Generated an unverified raw-instruction result with seed `{actual_seed}`. "
+        "Execution status: `generated_unverified`. Verification status: `not_run`."
+    )
+    return result_image, actual_seed, status, []
+
+
+def infer_from_contract(
+    edit_image,
+    contract_payload,
+    seed=666,
+    randomize_seed=False,
+    width=1024,
+    height=1024,
+    guidance_scale=50,
+    num_inference_steps=28,
+    lora_scale=1.0,
+):
+    """Validate, compile, and execute one planned edit with ICEdit."""
+    try:
+        contract = validate_execution_inputs(contract_payload)
+        compiled_prompt = compile_contract_prompt(contract)
+    except ContractExecutionError as exc:
+        raise gr.Error(str(exc)) from exc
+
+    result_image, actual_seed = infer(
+        edit_image,
+        compiled_prompt,
+        seed,
+        randomize_seed,
+        width,
+        height,
+        guidance_scale,
+        num_inference_steps,
+        lora_scale,
+    )
+    os.makedirs(args.output_dir, exist_ok=True)
+    metadata_path = os.path.join(
+        args.output_dir, f"planned_{time.time_ns()}_{actual_seed}.json"
+    )
+    with open(metadata_path, "w", encoding="utf-8") as handle:
+        json.dump(
+            {
+                "executor": "semantic_contract_prompt_v0",
+                "execution_status": "generated_unverified",
+                "verification_status": "not_run",
+                "seed": actual_seed,
+                "compiled_prompt": compiled_prompt,
+                "contract": contract,
+            },
+            handle,
+            ensure_ascii=False,
+            indent=2,
+        )
+        handle.write("\n")
+    status = (
+        f"Generated an unverified `{contract['topology']}` result for target "
+        f"`{contract['target']['name']}` with seed `{actual_seed}`. "
+        "Execution status: `generated_unverified`. Verification status: `not_run`."
+    )
+    return result_image, actual_seed, status
+
+
+def infer_contract_rounds(
+    edit_image,
+    current_instruction,
+    contract_payload,
+    target_mask_editor,
+    rounds,
+    seed=666,
+    randomize_seed=False,
+    width=1024,
+    height=1024,
+    guidance_scale=50,
+    num_inference_steps=28,
+    lora_scale=1.0,
+):
+    """Execute matching consecutive seeds and expose every result."""
+    try:
+        contract = load_contract_for_instruction(
+            contract_payload, current_instruction
+        )
+        compiled_prompt = compile_contract_prompt(contract)
+    except ContractExecutionError as exc:
+        raise gr.Error(str(exc)) from exc
+    if edit_image is None:
+        raise gr.Error("Upload a source image before proceeding.")
+
+    target_mask = painted_mask(target_mask_editor)
+    try:
+        contract = validate_execution_inputs(contract, target_mask)
+    except ContractExecutionError as exc:
+        raise gr.Error(str(exc)) from exc
+
+    rounds = max(1, min(int(rounds), 6))
+    native_fill = contract["topology"] in {"remove_entity", "remove_attribute"}
+    first_seed = random.randint(0, MAX_SEED - rounds) if randomize_seed else int(seed)
+    gallery = []
+    first_image = None
+    for round_index in range(rounds):
+        round_seed = (first_seed + round_index) % MAX_SEED
+        result_image, actual_seed = infer(
+            edit_image,
+            compiled_prompt,
+            round_seed,
+            False,
+            width,
+            height,
+            guidance_scale,
+            num_inference_steps,
+            lora_scale,
+            target_mask,
+            native_fill,
+        )
+        first_image = first_image or result_image
+        gallery.append((result_image, f"Round {round_index + 1} | seed {actual_seed}"))
+        metadata_path = os.path.join(
+            args.output_dir, f"planned_{time.time_ns()}_{actual_seed}.json"
+        )
+        with open(metadata_path, "w", encoding="utf-8") as handle:
+            json.dump(
+                {
+                    "executor": "fluxfill_native_masked" if native_fill else "icedit_masked",
+                    "execution_status": "generated_unverified",
+                    "verification_status": "not_run",
+                    "round": round_index + 1,
+                    "seed": actual_seed,
+                    "compiled_prompt": compiled_prompt,
+                    "target_mask_source": "user_painted" if target_mask else None,
+                    "contract": contract,
+                },
+                handle,
+                ensure_ascii=False,
+                indent=2,
+            )
+            handle.write("\n")
+
+    status = (
+        f"Generated {rounds} unverified planned rounds for `{contract['target']['name']}` "
+        f"with seeds `{first_seed}` to `{first_seed + rounds - 1}`. "
+        f"Spatial target mask: `{'active' if target_mask else 'full image'}`. "
+        f"Backend: `{'FluxFill native removal' if native_fill else 'ICEdit'}`. "
+        "Execution status: `generated_unverified`. Verification status: `not_run`."
+    )
+    return first_image, gallery, first_seed, status
+
+
+def initialize_mask_editor(image):
+    if image is None:
+        return None
+    background = image.convert("RGBA")
+    return {"background": background, "layers": [], "composite": background}
+
 
 original_examples = [
     "a tiny astronaut hatching from an egg on the moon",
@@ -166,7 +489,10 @@ css = """
 }
 """
 
-with gr.Blocks(css=css) as demo:
+GRADIO_MAJOR_VERSION = int(gr.__version__.split(".", maxsplit=1)[0])
+blocks_kwargs = {} if GRADIO_MAJOR_VERSION >= 6 else {"css": css}
+
+with gr.Blocks(**blocks_kwargs) as demo:
 
     with gr.Column(elem_id="col-container"):
         gr.Markdown(f"""# IC-Edit
@@ -190,7 +516,57 @@ For more details, check out our [Github Repository](https://github.com/River-Zha
                     placeholder="Enter your prompt",
                     container=False,
                 )
-                run_button = gr.Button("Run")
+                prompt_template = gr.Dropdown(
+                    choices=list(PROMPT_TEMPLATES),
+                    value="Choose a template...",
+                    label="Prompt template",
+                )
+
+                with gr.Accordion("Edit Contract Planner (experimental)", open=False):
+                    gr.Markdown(
+                        "Create and inspect the minimal edit contract before running ICEdit. "
+                        "The local planner works offline. OpenAI/Gemini use the uploaded image "
+                        "and require `OPENAI_API_KEY`/`GEMINI_API_KEY`. A valid resolved contract "
+                        "can be executed through semantic contract guidance."
+                    )
+                    planner_provider = gr.Dropdown(
+                        choices=[
+                            "Local rules (no image/API)",
+                            "OpenAI VLM",
+                            "Gemini VLM",
+                        ],
+                        value="Local rules (no image/API)",
+                        label="Planner",
+                    )
+                    planner_model = gr.Textbox(
+                        label="Optional model override",
+                        placeholder="Default: gpt-5.6-luna or gemini-3.5-flash",
+                    )
+                    plan_button = gr.Button("Plan / inspect contract")
+                    planner_status = gr.Markdown("No contract planned yet.")
+                    contract_json = gr.Code(
+                        label="Editable contract JSON",
+                        language="json",
+                        interactive=True,
+                        lines=22,
+                    )
+                    target_mask_editor = gr.ImageEditor(
+                        label="Paint target area for spatial execution",
+                        type="pil",
+                        image_mode="RGBA",
+                        sources=(),
+                        brush=gr.Brush(
+                            default_size=24,
+                            colors=["#ff2d2d"],
+                            default_color="#ff2d2d",
+                            color_mode="fixed",
+                        ),
+                        height=360,
+                    )
+                with gr.Row():
+                    run_button = gr.Button("Run original instruction")
+                    run_contract_button = gr.Button("Proceed: run planned rounds", variant="primary")
+                executor_status = gr.Markdown("No planned edit executed yet.")
 
             result = gr.Image(label="Result", show_label=False)
 
@@ -252,6 +628,22 @@ For more details, check out our [Github Repository](https://github.com/River-Zha
                 value=1.0,
             )
 
+            rounds = gr.Slider(
+                label="Planned rounds",
+                minimum=1,
+                maximum=6,
+                step=1,
+                value=3,
+            )
+
+        round_gallery = gr.Gallery(
+            label="Planned edit rounds",
+            columns=3,
+            rows=2,
+            object_fit="contain",
+            height="auto",
+        )
+
         def process_example(edit_image, prompt, seed, randomize_seed):
             result, seed_out = infer(edit_image, prompt, seed, False, 1024, 1024, 50, 28, 1.0)
             return result, seed_out, False
@@ -264,17 +656,91 @@ For more details, check out our [Github Repository](https://github.com/River-Zha
             cache_examples=False
         )
 
-    gr.on(
-        triggers=[run_button.click, prompt.submit],
-        fn=infer,
-        inputs=[edit_image, prompt, seed, randomize_seed, width, height, guidance_scale, num_inference_steps, lora_scale],
-        outputs=[result, seed]
-    )
+        plan_button.click(
+            fn=plan_edit_contract,
+            inputs=[edit_image, prompt, planner_provider, planner_model],
+            outputs=[contract_json, planner_status],
+        )
+        edit_image.change(
+            fn=reset_after_image_change,
+            inputs=[edit_image],
+            outputs=[
+                target_mask_editor,
+                contract_json,
+                planner_status,
+                result,
+                round_gallery,
+                executor_status,
+            ],
+        )
+        prompt.change(
+            fn=lambda: invalidate_plan_state("Instruction changed."),
+            outputs=[
+                contract_json,
+                planner_status,
+                result,
+                round_gallery,
+                executor_status,
+            ],
+        )
+        planner_provider.change(
+            fn=lambda: invalidate_plan_state("Planner changed."),
+            outputs=[
+                contract_json,
+                planner_status,
+                result,
+                round_gallery,
+                executor_status,
+            ],
+        )
+        planner_model.change(
+            fn=lambda: invalidate_plan_state("Planner model changed."),
+            outputs=[
+                contract_json,
+                planner_status,
+                result,
+                round_gallery,
+                executor_status,
+            ],
+        )
+        prompt_template.change(
+            fn=template_prompt,
+            inputs=[prompt_template],
+            outputs=[prompt],
+        )
+        run_contract_button.click(
+            fn=infer_contract_rounds,
+            inputs=[
+                edit_image,
+                prompt,
+                contract_json,
+                target_mask_editor,
+                rounds,
+                seed,
+                randomize_seed,
+                width,
+                height,
+                guidance_scale,
+                num_inference_steps,
+                lora_scale,
+            ],
+            outputs=[result, round_gallery, seed, executor_status],
+        )
+
+        run_button.click(
+            fn=infer_original_with_status,
+            inputs=[edit_image, prompt, seed, randomize_seed, width, height, guidance_scale, num_inference_steps, lora_scale],
+            outputs=[result, seed, executor_status, round_gallery],
+        )
     
-if __name__ == "__main__": 
-    demo.launch(
+if __name__ == "__main__":
+    load_model_pipeline()
+    launch_kwargs = dict(
         server_name=args.server_name, 
         server_port=args.port,
         share=args.share, 
         inbrowser=True,
     )
+    if GRADIO_MAJOR_VERSION >= 6:
+        launch_kwargs["css"] = css
+    demo.launch(**launch_kwargs)

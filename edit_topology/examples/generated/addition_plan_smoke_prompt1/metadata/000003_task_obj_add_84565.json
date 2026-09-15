@@ -1,0 +1,168 @@
+{
+  "index": 3,
+  "omni_edit_id": "task_obj_add_84565",
+  "task": "addition",
+  "prompt": "Add a man with dark hair and a blue shirt giving a piggyback ride to a woman with curly hair in the background.",
+  "all_prompts": [
+    "Add man",
+    "Add a man with dark hair and a blue shirt giving a piggyback ride to a woman with curly hair in the background."
+  ],
+  "seed": 304897404,
+  "pipeline_mode": "plan-only",
+  "execution": {
+    "status": "not_requested",
+    "backend": null,
+    "executed_prompt": null,
+    "requires_mask": false,
+    "mask_path": null,
+    "result_path": null,
+    "latency_ms": null,
+    "error": null,
+    "verification_status": "not_run"
+  },
+  "task_raw": "addition",
+  "task_normalized": "addition",
+  "planning": {
+    "status": "clarification_required",
+    "ready": false,
+    "planner": "rule",
+    "model": null,
+    "latency_ms": 8.4,
+    "contract_schema_version": "0.2.0",
+    "task_raw": "addition",
+    "task_normalized": "addition",
+    "task_compatibility": {
+      "expected_topologies": [
+        "attach_entity",
+        "insert_entity",
+        "modify_attribute"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [
+      "Is the anchor already visible, or should it be added as part of the new content?"
+    ],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_add_a_man_with_dark_hair_and_a_blue_shirt_giv_4aa768c9",
+      "instruction": "Add a man with dark hair and a blue shirt giving a piggyback ride to a woman with curly hair in the background.",
+      "topology": "attach_entity",
+      "operation": "add",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "man",
+        "entity_type": "person",
+        "instance_ref": "new_person",
+        "count": {
+          "value": 1,
+          "quantifier": "exact",
+          "exact": true
+        },
+        "existing": false
+      },
+      "referring_constraints": [
+        {
+          "field": "appearance.color",
+          "value": "blue",
+          "source": "instruction",
+          "scope": "target"
+        },
+        {
+          "field": "clothing",
+          "value": "shirt",
+          "source": "instruction",
+          "scope": "target"
+        },
+        {
+          "field": "position",
+          "value": "background",
+          "source": "instruction",
+          "scope": "anchor"
+        }
+      ],
+      "required_relations": [
+        {
+          "subject": "new_person",
+          "predicate": "related_to",
+          "object": "woman_with_curly_hair_in_the_background",
+          "required": true
+        }
+      ],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "man",
+            "entity_ref": "new_person",
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [
+        {
+          "field": "anchor.definiteness",
+          "status": "unresolved",
+          "confidence": 0.4,
+          "description": "An indefinite anchor may describe another new entity rather than an existing one.",
+          "assumption": null
+        }
+      ],
+      "clarification": {
+        "needed": true,
+        "questions": [
+          "Is the anchor already visible, or should it be added as part of the new content?"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as add",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as attach_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ],
+      "anchor": {
+        "entity_type": "person",
+        "instance_ref": "woman_with_curly_hair_in_the_background",
+        "part": null,
+        "relation": "related_to"
+      }
+    }
+  }
+}

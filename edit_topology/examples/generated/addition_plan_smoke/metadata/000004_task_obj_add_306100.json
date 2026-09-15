@@ -1,0 +1,123 @@
+{
+  "index": 4,
+  "omni_edit_id": "task_obj_add_306100",
+  "task": "addition",
+  "prompt": "Add tower",
+  "all_prompts": [
+    "Add tower",
+    "Add a section of the Great Wall in the mid-ground."
+  ],
+  "seed": 304897405,
+  "pipeline_mode": "plan-only",
+  "task_raw": "addition",
+  "task_normalized": "addition",
+  "planning": {
+    "status": "clarification_required",
+    "ready": false,
+    "planner": "rule",
+    "model": null,
+    "task_raw": "addition",
+    "task_normalized": "addition",
+    "task_compatibility": {
+      "expected_topologies": [
+        "attach_entity",
+        "insert_entity",
+        "modify_attribute"
+      ],
+      "matches": true
+    },
+    "validation_errors": [],
+    "clarification_questions": [
+      "Where should the tower be placed?"
+    ],
+    "error": null,
+    "contract": {
+      "schema_version": "0.2.0",
+      "contract_id": "trial_add_tower_04055919",
+      "instruction": "Add tower",
+      "topology": "insert_entity",
+      "operation": "add",
+      "edit_scope": "local",
+      "target": {
+        "kind": "entity",
+        "name": "tower",
+        "entity_type": "tower",
+        "instance_ref": "new_tower",
+        "count": {
+          "value": 1,
+          "quantifier": "exact",
+          "exact": true
+        },
+        "existing": false
+      },
+      "referring_constraints": [],
+      "required_relations": [],
+      "forbidden_outcomes": [
+        "change unrelated entities",
+        "alter protected content outside the edit footprint",
+        "produce a different edit topology than requested"
+      ],
+      "invariants": [
+        {
+          "subject": "unrelated scene content",
+          "property": "identity, layout, and appearance",
+          "tolerance": "strict"
+        }
+      ],
+      "region_roles": {
+        "target": [
+          {
+            "description": "tower",
+            "entity_ref": "new_tower",
+            "mask_status": "pending"
+          }
+        ],
+        "dependent": [
+          {
+            "description": "local occlusion, boundary, contact, and shadow",
+            "mask_status": "pending"
+          }
+        ],
+        "context": [
+          {
+            "description": "nearby geometry, lighting, scale, and source style",
+            "mask_status": "not_requested"
+          }
+        ],
+        "protected": [
+          {
+            "description": "all other non-target scene content",
+            "mask_status": "pending"
+          }
+        ]
+      },
+      "ambiguities": [
+        {
+          "field": "placement",
+          "status": "unresolved",
+          "confidence": 0.25,
+          "description": "The parser found no explicit insertion placement.",
+          "assumption": null
+        }
+      ],
+      "clarification": {
+        "needed": true,
+        "questions": [
+          "Where should the tower be placed?"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "operation represented as add",
+          "source": "annotation_rule",
+          "evidence": "supported keyword rule"
+        },
+        {
+          "claim": "topology parsed as insert_entity",
+          "source": "annotation_rule",
+          "evidence": "rule-based v0.2 parser"
+        }
+      ]
+    }
+  }
+}

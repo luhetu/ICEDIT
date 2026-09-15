@@ -1,0 +1,788 @@
+{
+  "elapsed_seconds": 0.3338446879934054,
+  "tests": [
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_all_examples_validate",
+      "group": "Contract schema",
+      "name": "test_all_examples_validate",
+      "description": "test all examples validate",
+      "status": "PASS",
+      "duration_ms": 8.61,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_attachment_requires_anchor",
+      "group": "Contract schema",
+      "name": "test_attachment_requires_anchor",
+      "description": "test attachment requires anchor",
+      "status": "PASS",
+      "duration_ms": 0.48,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_exact_count_cannot_be_null",
+      "group": "Contract schema",
+      "name": "test_exact_count_cannot_be_null",
+      "description": "test exact count cannot be null",
+      "status": "PASS",
+      "duration_ms": 0.14,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_exactly_twenty_unique_review_contracts",
+      "group": "Contract schema",
+      "name": "test_exactly_twenty_unique_review_contracts",
+      "description": "test exactly twenty unique review contracts",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_examples_cover_initial_five_topologies",
+      "group": "Contract schema",
+      "name": "test_examples_cover_initial_five_topologies",
+      "description": "test examples cover initial five topologies",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_grounded_region_requires_mask_uri",
+      "group": "Contract schema",
+      "name": "test_grounded_region_requires_mask_uri",
+      "description": "test grounded region requires mask uri",
+      "status": "PASS",
+      "duration_ms": 6.53,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_operation_must_match_topology",
+      "group": "Contract schema",
+      "name": "test_operation_must_match_topology",
+      "description": "test operation must match topology",
+      "status": "PASS",
+      "duration_ms": 0.42,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_referring_constraint_requires_scope",
+      "group": "Contract schema",
+      "name": "test_referring_constraint_requires_scope",
+      "description": "test referring constraint requires scope",
+      "status": "PASS",
+      "duration_ms": 0.18,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_schema_declares_all_nine_v02_topologies",
+      "group": "Contract schema",
+      "name": "test_schema_declares_all_nine_v02_topologies",
+      "description": "test schema declares all nine v02 topologies",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_schema_is_valid_draft_2020_12",
+      "group": "Contract schema",
+      "name": "test_schema_is_valid_draft_2020_12",
+      "description": "test schema is valid draft 2020 12",
+      "status": "PASS",
+      "duration_ms": 25.63,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_semantics_require_clarification_for_unresolved_ambiguity",
+      "group": "Contract schema",
+      "name": "test_semantics_require_clarification_for_unresolved_ambiguity",
+      "description": "test semantics require clarification for unresolved ambiguity",
+      "status": "PASS",
+      "duration_ms": 4.88,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_unknown_fields_are_rejected",
+      "group": "Contract schema",
+      "name": "test_unknown_fields_are_rejected",
+      "description": "test unknown fields are rejected",
+      "status": "PASS",
+      "duration_ms": 0.06,
+      "detail": ""
+    },
+    {
+      "id": "test_contract_schema.EditTopologyContractSchemaTests.test_unresolved_clarification_requires_question",
+      "group": "Contract schema",
+      "name": "test_unresolved_clarification_requires_question",
+      "description": "test unresolved clarification requires question",
+      "status": "PASS",
+      "duration_ms": 0.36,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_empty_and_whole_image_masks_are_rejected",
+      "group": "Dataset planning",
+      "name": "test_empty_and_whole_image_masks_are_rejected",
+      "description": "test empty and whole image masks are rejected",
+      "status": "PASS",
+      "duration_ms": 0.22,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_generation_receives_compiled_prompt",
+      "group": "Dataset planning",
+      "name": "test_generation_receives_compiled_prompt",
+      "description": "test generation receives compiled prompt",
+      "status": "PASS",
+      "duration_ms": 10.95,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_invalid_mask_blocks_before_generation",
+      "group": "Dataset planning",
+      "name": "test_invalid_mask_blocks_before_generation",
+      "description": "test invalid mask blocks before generation",
+      "status": "PASS",
+      "duration_ms": 7.23,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_mask_free_plan_ignores_coincidental_mask_file",
+      "group": "Dataset planning",
+      "name": "test_mask_free_plan_ignores_coincidental_mask_file",
+      "description": "test mask free plan ignores coincidental mask file",
+      "status": "PASS",
+      "duration_ms": 6.59,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_mismatch_and_clarification_fail_closed",
+      "group": "Dataset planning",
+      "name": "test_mismatch_and_clarification_fail_closed",
+      "description": "test mismatch and clarification fail closed",
+      "status": "PASS",
+      "duration_ms": 6.27,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_plan_only_explicitly_records_that_generation_was_not_requested",
+      "group": "Dataset planning",
+      "name": "test_plan_only_explicitly_records_that_generation_was_not_requested",
+      "description": "test plan only explicitly records that generation was not requested",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_plan_only_reports_future_mask_requirement",
+      "group": "Dataset planning",
+      "name": "test_plan_only_reports_future_mask_requirement",
+      "description": "test plan only reports future mask requirement",
+      "status": "PASS",
+      "duration_ms": 3.14,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_planned_addition_compiles_contract_prompt",
+      "group": "Dataset planning",
+      "name": "test_planned_addition_compiles_contract_prompt",
+      "description": "test planned addition compiles contract prompt",
+      "status": "PASS",
+      "duration_ms": 5.67,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_planned_removal_without_mask_is_blocked",
+      "group": "Dataset planning",
+      "name": "test_planned_removal_without_mask_is_blocked",
+      "description": "test planned removal without mask is blocked",
+      "status": "PASS",
+      "duration_ms": 5.29,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_planned_row_with_blocked_contract_cannot_execute",
+      "group": "Dataset planning",
+      "name": "test_planned_row_with_blocked_contract_cannot_execute",
+      "description": "test planned row with blocked contract cannot execute",
+      "status": "PASS",
+      "duration_ms": 2.94,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_rule_plan_records_ready_compatible_contract",
+      "group": "Dataset planning",
+      "name": "test_rule_plan_records_ready_compatible_contract",
+      "description": "test rule plan records ready compatible contract",
+      "status": "PASS",
+      "duration_ms": 3.6,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_task_compatibility_splits_swap_and_global_tasks",
+      "group": "Dataset planning",
+      "name": "test_task_compatibility_splits_swap_and_global_tasks",
+      "description": "test task compatibility splits swap and global tasks",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_task_filter_normalizes_aliases_and_rejects_unknown",
+      "group": "Dataset planning",
+      "name": "test_task_filter_normalizes_aliases_and_rejects_unknown",
+      "description": "test task filter normalizes aliases and rejects unknown",
+      "status": "PASS",
+      "duration_ms": 0.06,
+      "detail": ""
+    },
+    {
+      "id": "test_dataset_runner.DatasetRunnerPlanningTests.test_transparent_png_mask_uses_alpha",
+      "group": "Dataset planning",
+      "name": "test_transparent_png_mask_uses_alpha",
+      "description": "test transparent png mask uses alpha",
+      "status": "PASS",
+      "duration_ms": 0.13,
+      "detail": ""
+    },
+    {
+      "id": "test_demo_templates.DemoTemplateTests.test_flower_template_populates_explicit_protection",
+      "group": "Demo templates",
+      "name": "test_flower_template_populates_explicit_protection",
+      "description": "test flower template populates explicit protection",
+      "status": "PASS",
+      "duration_ms": 0.26,
+      "detail": ""
+    },
+    {
+      "id": "test_demo_templates.DemoTemplateTests.test_named_templates_are_nonempty_and_schema_valid",
+      "group": "Demo templates",
+      "name": "test_named_templates_are_nonempty_and_schema_valid",
+      "description": "test named templates are nonempty and schema valid",
+      "status": "PASS",
+      "duration_ms": 32.34,
+      "detail": ""
+    },
+    {
+      "id": "test_demo_templates.DemoTemplateTests.test_unknown_template_is_safe",
+      "group": "Demo templates",
+      "name": "test_unknown_template_is_safe",
+      "description": "test unknown template is safe",
+      "status": "PASS",
+      "duration_ms": 0.01,
+      "detail": ""
+    },
+    {
+      "id": "test_dev_validation.DevelopmentValidationTests.test_all_development_cases_pass",
+      "group": "Development checks",
+      "name": "test_all_development_cases_pass",
+      "description": "test all development cases pass",
+      "status": "PASS",
+      "duration_ms": 35.53,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_attribute_removal_prompt_does_not_repeat_removed_text",
+      "group": "Contract executor",
+      "name": "test_attribute_removal_prompt_does_not_repeat_removed_text",
+      "description": "test attribute removal prompt does not repeat removed text",
+      "status": "PASS",
+      "duration_ms": 3.16,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_compiles_topology_and_preservation_for_icedit",
+      "group": "Contract executor",
+      "name": "test_compiles_topology_and_preservation_for_icedit",
+      "description": "test compiles topology and preservation for icedit",
+      "status": "PASS",
+      "duration_ms": 3.21,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_global_topologies_do_not_require_runtime_mask",
+      "group": "Contract executor",
+      "name": "test_global_topologies_do_not_require_runtime_mask",
+      "description": "test global topologies do not require runtime mask",
+      "status": "PASS",
+      "duration_ms": 5.22,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_global_topology_prompts_preserve_structure_not_appearance",
+      "group": "Contract executor",
+      "name": "test_global_topology_prompts_preserve_structure_not_appearance",
+      "description": "test global topology prompts preserve structure not appearance",
+      "status": "PASS",
+      "duration_ms": 5.22,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_regional_style_requires_runtime_mask_and_compiles_local_prompt",
+      "group": "Contract executor",
+      "name": "test_regional_style_requires_runtime_mask_and_compiles_local_prompt",
+      "description": "test regional style requires runtime mask and compiles local prompt",
+      "status": "PASS",
+      "duration_ms": 5.49,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_rejects_contract_that_needs_clarification",
+      "group": "Contract executor",
+      "name": "test_rejects_contract_that_needs_clarification",
+      "description": "test rejects contract that needs clarification",
+      "status": "PASS",
+      "duration_ms": 3.04,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_rejects_invalid_json",
+      "group": "Contract executor",
+      "name": "test_rejects_invalid_json",
+      "description": "test rejects invalid json",
+      "status": "PASS",
+      "duration_ms": 0.05,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_removal_prompt_does_not_repeat_protected_text",
+      "group": "Contract executor",
+      "name": "test_removal_prompt_does_not_repeat_protected_text",
+      "description": "test removal prompt does not repeat protected text",
+      "status": "PASS",
+      "duration_ms": 2.81,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_replace_background_prompt_protects_foreground",
+      "group": "Contract executor",
+      "name": "test_replace_background_prompt_protects_foreground",
+      "description": "test replace background prompt protects foreground",
+      "status": "PASS",
+      "duration_ms": 4.0,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_replace_entity_prompt_uses_result_not_source_selector",
+      "group": "Contract executor",
+      "name": "test_replace_entity_prompt_uses_result_not_source_selector",
+      "description": "test replace entity prompt uses result not source selector",
+      "status": "PASS",
+      "duration_ms": 2.8,
+      "detail": ""
+    },
+    {
+      "id": "test_executor.ContractExecutorTests.test_replace_topologies_require_runtime_mask",
+      "group": "Contract executor",
+      "name": "test_replace_topologies_require_runtime_mask",
+      "description": "test replace topologies require runtime mask",
+      "status": "PASS",
+      "duration_ms": 11.33,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_clarification_is_reported_as_blocked",
+      "group": "test_gradio_demo_flow",
+      "name": "test_clarification_is_reported_as_blocked",
+      "description": "test clarification is reported as blocked",
+      "status": "PASS",
+      "duration_ms": 3.61,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_current_instruction_must_match_planned_contract",
+      "group": "test_gradio_demo_flow",
+      "name": "test_current_instruction_must_match_planned_contract",
+      "description": "test current instruction must match planned contract",
+      "status": "PASS",
+      "duration_ms": 9.73,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_input_invalidation_clears_contract_and_outputs",
+      "group": "test_gradio_demo_flow",
+      "name": "test_input_invalidation_clears_contract_and_outputs",
+      "description": "test input invalidation clears contract and outputs",
+      "status": "PASS",
+      "duration_ms": 0.05,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_masked_icedit_restores_every_unmasked_pixel",
+      "group": "test_gradio_demo_flow",
+      "name": "test_masked_icedit_restores_every_unmasked_pixel",
+      "description": "test masked icedit restores every unmasked pixel",
+      "status": "PASS",
+      "duration_ms": 0.8,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_prompt_submit_does_not_silently_run_raw",
+      "group": "test_gradio_demo_flow",
+      "name": "test_prompt_submit_does_not_silently_run_raw",
+      "description": "test prompt submit does not silently run raw",
+      "status": "PASS",
+      "duration_ms": 0.03,
+      "detail": ""
+    },
+    {
+      "id": "test_gradio_demo_flow.GradioDemoFlowTests.test_raw_run_reports_generated_but_unverified",
+      "group": "test_gradio_demo_flow",
+      "name": "test_raw_run_reports_generated_but_unverified",
+      "description": "test raw run reports generated but unverified",
+      "status": "PASS",
+      "duration_ms": 0.15,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_openai_path_uses_exactly_one_call",
+      "group": "VLM parser",
+      "name": "test_openai_path_uses_exactly_one_call",
+      "description": "test openai path uses exactly one call",
+      "status": "PASS",
+      "duration_ms": 4.48,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_prompt_names_rule_derived_immutable_fields",
+      "group": "VLM parser",
+      "name": "test_prompt_names_rule_derived_immutable_fields",
+      "description": "test prompt names rule derived immutable fields",
+      "status": "PASS",
+      "duration_ms": 3.79,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_rejects_changed_instruction",
+      "group": "VLM parser",
+      "name": "test_rejects_changed_instruction",
+      "description": "test rejects changed instruction",
+      "status": "PASS",
+      "duration_ms": 0.46,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_rejects_changes_to_rule_derived_fields",
+      "group": "VLM parser",
+      "name": "test_rejects_changes_to_rule_derived_fields",
+      "description": "test rejects changes to rule derived fields",
+      "status": "PASS",
+      "duration_ms": 1.77,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_rejects_locally_invalid_contract",
+      "group": "VLM parser",
+      "name": "test_rejects_locally_invalid_contract",
+      "description": "test rejects locally invalid contract",
+      "status": "PASS",
+      "duration_ms": 3.7,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_rejects_rewriting_existing_replacement_contract",
+      "group": "VLM parser",
+      "name": "test_rejects_rewriting_existing_replacement_contract",
+      "description": "test rejects rewriting existing replacement contract",
+      "status": "PASS",
+      "duration_ms": 0.69,
+      "detail": ""
+    },
+    {
+      "id": "test_model_parser.ModelParserTests.test_vlm_may_ground_instance_but_not_rewrite_target_semantics",
+      "group": "VLM parser",
+      "name": "test_vlm_may_ground_instance_but_not_rewrite_target_semantics",
+      "description": "test vlm may ground instance but not rewrite target semantics",
+      "status": "PASS",
+      "duration_ms": 4.75,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_add_bottle_on_table_keeps_bottle_as_target",
+      "group": "Rule parser",
+      "name": "test_add_bottle_on_table_keeps_bottle_as_target",
+      "description": "test add bottle on table keeps bottle as target",
+      "status": "PASS",
+      "duration_ms": 1.22,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_add_hat_to_man_is_attachment",
+      "group": "Rule parser",
+      "name": "test_add_hat_to_man_is_attachment",
+      "description": "test add hat to man is attachment",
+      "status": "PASS",
+      "duration_ms": 1.13,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_add_long_hair_is_attribute_modification",
+      "group": "Rule parser",
+      "name": "test_add_long_hair_is_attribute_modification",
+      "description": "test add long hair is attribute modification",
+      "status": "PASS",
+      "duration_ms": 1.13,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_anchor_count_does_not_change_target_count",
+      "group": "Rule parser",
+      "name": "test_anchor_count_does_not_change_target_count",
+      "description": "test anchor count does not change target count",
+      "status": "PASS",
+      "duration_ms": 1.04,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_deictic_anchor_requires_clarification",
+      "group": "Rule parser",
+      "name": "test_deictic_anchor_requires_clarification",
+      "description": "test deictic anchor requires clarification",
+      "status": "PASS",
+      "duration_ms": 0.18,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_except_clause_protects_the_excluded_target",
+      "group": "Rule parser",
+      "name": "test_except_clause_protects_the_excluded_target",
+      "description": "test except clause protects the excluded target",
+      "status": "PASS",
+      "duration_ms": 1.01,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_explicit_stone_anchor_is_supported_by",
+      "group": "Rule parser",
+      "name": "test_explicit_stone_anchor_is_supported_by",
+      "description": "test explicit stone anchor is supported by",
+      "status": "PASS",
+      "duration_ms": 0.23,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_leading_protection_clause_does_not_hide_edit",
+      "group": "Rule parser",
+      "name": "test_leading_protection_clause_does_not_hide_edit",
+      "description": "test leading protection clause does not hide edit",
+      "status": "PASS",
+      "duration_ms": 1.0,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_leave_untouched_clause_becomes_protection",
+      "group": "Rule parser",
+      "name": "test_leave_untouched_clause_becomes_protection",
+      "description": "test leave untouched clause becomes protection",
+      "status": "PASS",
+      "duration_ms": 1.01,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_negated_edit_is_a_protection_not_the_requested_action",
+      "group": "Rule parser",
+      "name": "test_negated_edit_is_a_protection_not_the_requested_action",
+      "description": "test negated edit is a protection not the requested action",
+      "status": "PASS",
+      "duration_ms": 1.01,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_negated_only_instruction_requires_a_positive_edit",
+      "group": "Rule parser",
+      "name": "test_negated_only_instruction_requires_a_positive_edit",
+      "description": "test negated only instruction requires a positive edit",
+      "status": "PASS",
+      "duration_ms": 1.18,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_possessive_hand_anchor_is_grounded",
+      "group": "Rule parser",
+      "name": "test_possessive_hand_anchor_is_grounded",
+      "description": "test possessive hand anchor is grounded",
+      "status": "PASS",
+      "duration_ms": 1.04,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_protection_clause_does_not_replace_sign_target",
+      "group": "Rule parser",
+      "name": "test_protection_clause_does_not_replace_sign_target",
+      "description": "test protection clause does not replace sign target",
+      "status": "PASS",
+      "duration_ms": 0.61,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_remove_handwriting_from_paper_is_attribute_removal",
+      "group": "Rule parser",
+      "name": "test_remove_handwriting_from_paper_is_attribute_removal",
+      "description": "test remove handwriting from paper is attribute removal",
+      "status": "PASS",
+      "duration_ms": 0.62,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_remove_two_men_is_entity_removal",
+      "group": "Rule parser",
+      "name": "test_remove_two_men_is_entity_removal",
+      "description": "test remove two men is entity removal",
+      "status": "PASS",
+      "duration_ms": 0.6,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_replace_operation_is_supported_in_v02",
+      "group": "Rule parser",
+      "name": "test_replace_operation_is_supported_in_v02",
+      "description": "test replace operation is supported in v02",
+      "status": "PASS",
+      "duration_ms": 0.68,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_two_named_targets_require_clarification",
+      "group": "Rule parser",
+      "name": "test_two_named_targets_require_clarification",
+      "description": "test two named targets require clarification",
+      "status": "PASS",
+      "duration_ms": 0.58,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_two_positive_operations_require_separate_contracts",
+      "group": "Rule parser",
+      "name": "test_two_positive_operations_require_separate_contracts",
+      "description": "test two positive operations require separate contracts",
+      "status": "PASS",
+      "duration_ms": 0.56,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_trial.ParserTrialTests.test_unspecified_count_requires_clarification",
+      "group": "Rule parser",
+      "name": "test_unspecified_count_requires_clarification",
+      "description": "test unspecified count requires clarification",
+      "status": "PASS",
+      "duration_ms": 0.53,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_apply_style_from_omniedit_style_pattern",
+      "group": "V0.2 task coverage",
+      "name": "test_apply_style_from_omniedit_style_pattern",
+      "description": "test apply style from omniedit style pattern",
+      "status": "PASS",
+      "duration_ms": 3.57,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_attach_entity_to_named_body_part",
+      "group": "V0.2 task coverage",
+      "name": "test_attach_entity_to_named_body_part",
+      "description": "test attach entity to named body part",
+      "status": "PASS",
+      "duration_ms": 3.1,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_insert_entity_from_omniedit_addition",
+      "group": "V0.2 task coverage",
+      "name": "test_insert_entity_from_omniedit_addition",
+      "description": "test insert entity from omniedit addition",
+      "status": "PASS",
+      "duration_ms": 2.93,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_modify_attribute_keeps_desired_value_out_of_selectors",
+      "group": "V0.2 task coverage",
+      "name": "test_modify_attribute_keeps_desired_value_out_of_selectors",
+      "description": "test modify attribute keeps desired value out of selectors",
+      "status": "PASS",
+      "duration_ms": 2.94,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_modify_environment_from_omniedit_env_pattern",
+      "group": "V0.2 task coverage",
+      "name": "test_modify_environment_from_omniedit_env_pattern",
+      "description": "test modify environment from omniedit env pattern",
+      "status": "PASS",
+      "duration_ms": 3.4,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_remove_entity_does_not_promote_descriptor_to_target",
+      "group": "V0.2 task coverage",
+      "name": "test_remove_entity_does_not_promote_descriptor_to_target",
+      "description": "test remove entity does not promote descriptor to target",
+      "status": "PASS",
+      "duration_ms": 3.1,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_remove_text_attribute_grounds_its_carrier",
+      "group": "V0.2 task coverage",
+      "name": "test_remove_text_attribute_grounds_its_carrier",
+      "description": "test remove text attribute grounds its carrier",
+      "status": "PASS",
+      "duration_ms": 2.94,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_replace_background_from_omniedit_swap_pattern",
+      "group": "V0.2 task coverage",
+      "name": "test_replace_background_from_omniedit_swap_pattern",
+      "description": "test replace background from omniedit swap pattern",
+      "status": "PASS",
+      "duration_ms": 3.21,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_replace_entity_scopes_source_anchor_and_result",
+      "group": "V0.2 task coverage",
+      "name": "test_replace_entity_scopes_source_anchor_and_result",
+      "description": "test replace entity scopes source anchor and result",
+      "status": "PASS",
+      "duration_ms": 3.16,
+      "detail": ""
+    },
+    {
+      "id": "test_parser_v02.ParserV02AcceptanceTests.test_task_normalization_and_multi_target_safeguards",
+      "group": "V0.2 task coverage",
+      "name": "test_task_normalization_and_multi_target_safeguards",
+      "description": "test task normalization and multi target safeguards",
+      "status": "PASS",
+      "duration_ms": 6.24,
+      "detail": ""
+    },
+    {
+      "id": "test_spatial_mask.SpatialMaskTests.test_composite_spatial_result_keeps_every_unmasked_pixel_exact",
+      "group": "Spatial masks",
+      "name": "test_composite_spatial_result_keeps_every_unmasked_pixel_exact",
+      "description": "test composite spatial result keeps every unmasked pixel exact",
+      "status": "PASS",
+      "duration_ms": 0.13,
+      "detail": ""
+    },
+    {
+      "id": "test_spatial_mask.SpatialMaskTests.test_painted_mask_unions_layer_alpha",
+      "group": "Spatial masks",
+      "name": "test_painted_mask_unions_layer_alpha",
+      "description": "test painted mask unions layer alpha",
+      "status": "PASS",
+      "duration_ms": 0.06,
+      "detail": ""
+    },
+    {
+      "id": "test_spatial_mask.SpatialMaskTests.test_prepare_diptych_preserves_source_and_confines_mask",
+      "group": "Spatial masks",
+      "name": "test_prepare_diptych_preserves_source_and_confines_mask",
+      "description": "test prepare diptych preserves source and confines mask",
+      "status": "PASS",
+      "duration_ms": 0.08,
+      "detail": ""
+    }
+  ]
+}
