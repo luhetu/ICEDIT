@@ -64,6 +64,7 @@ def main():
     ap.add_argument("--guidance", type=float, default=50)
     ap.add_argument("--flux-path", default="models/flux.1-fill-dev")
     ap.add_argument("--lora-path", default="models/ICEdit-normal-LoRA")
+    ap.add_argument("--lora-weight-name", default="pytorch_lora_weights.safetensors")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--cpu-offload", action="store_true")
     args = ap.parse_args()
@@ -109,7 +110,8 @@ def main():
         "diffusers": diffusers.__version__, "gpu": torch.cuda.get_device_name()}, indent=2))
     pipe = FluxFillPipeline.from_pretrained(args.flux_path, torch_dtype=torch.bfloat16,
                                            local_files_only=True)
-    pipe.load_lora_weights(args.lora_path)
+    pipe.load_lora_weights(args.lora_path, weight_name=args.lora_weight_name,
+                           local_files_only=True)
     if args.cpu_offload:
         pipe.enable_model_cpu_offload()
     else:

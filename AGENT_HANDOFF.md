@@ -119,7 +119,8 @@ Never cancel or modify unrelated jobs.
 
 ## Immediate Next Steps
 
-1. Verify jobs 1040171 and 1040182 using `sacct`, logs, output counts, and images.
+1. Verify replacement ICEdit job 1042473, its logs and outputs. Historical jobs
+   1040171/1040182 were reconfirmed FAILED on September 15; do not rerun them.
 2. For ObjectClear, compare AGF on/off to separate generation from final fusion.
 3. Run ICEdit, native Fill, ObjectClear, OmniPaint, and Attentive Eraser on the
    same small, fixed removal set with matched information budgets.
@@ -163,8 +164,37 @@ licenses. Update `AGENT_HANDOFF.md` at the end of every substantial session.
 
 The original upstream remote is `https://github.com/River-Zhang/ICEdit.git`.
 Keep it as `upstream`. Push research work only to the user's personal repository.
-At the time of this update, a personal GitHub repository still needs to be
-created or supplied before the first push.
+The personal repository is `https://github.com/luhetu/ICEDIT.git`; `origin` uses
+SSH and the initial handoff was pushed at commit `96f2468`. The repository is
+public. Keep checkpoints, private data, secrets and large outputs excluded.
+
+## September 15: CVPR Progress Session
+
+- User requested progress toward the September 16 tutor report, targeting CVPR.
+- Read current logs and Slurm accounting: both old jobs failed before generation;
+  no active ICEdit/ObjectClear job existed at the beginning of this session.
+- Fixed the pilot's offline LoRA loading with explicit `--lora-weight-name`
+  (default `pytorch_lora_weights.safetensors`) and `local_files_only=True`.
+  Confirmed that the checkpoint file exists before making the change.
+- Dry-run validated all 15 configurations in
+  `research_outputs/removal_preflight_20260915`; this validates inputs, not GPU
+  execution or generation quality. Python compilation and Slurm syntax passed.
+- Submitted replacement job **1042473** with the existing 28-step, three-seed,
+  five-condition protocol. Last checked PENDING (Priority). Output directory:
+  `research_outputs/removal_pilot_1042473`; logs use `icedit_removal_pilot1042473`.
+- Ran local unittest modules `test_spatial_mask`, `test_executor`, and
+  `test_contract_schema`: **30 tests passed**. Full test suite not run this turn.
+- NCC-only environment change: ObjectClear `pyvenv.cfg` now sets
+  `include-system-site-packages = false`, retaining the ICEdit `.pth` path.
+  A 120-second pipeline import check timed out; import timing shows slow Torch
+  imports. This is still shared-package setup, not a newly validated clean env.
+  Do not submit ObjectClear GPU jobs until the complete pipeline import passes.
+- Added `edit_topology/experiments/2026-09-15_cvpr_progress_zh.md`: six-slide
+  outline, evidence boundaries, proposed mechanism and two-week decision plan.
+  Local report copy: `/home/hetu/MY project/ICEdit_CVPR_Progress_2026-09-15.md`.
+- Rechecked primary ObjectClear v2, Consistency Critic and AdaEraser pages.
+  Instance-ownership control remains a research hypothesis; no new method
+  improvement or strong-baseline comparison has been established this session.
 
 ## Latest Sync Verification
 
