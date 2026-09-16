@@ -232,6 +232,14 @@ public. Keep checkpoints, private data, secrets and large outputs excluded.
 
 ## Latest Sync Verification
 
+- September 16 presentation update: `reports/ICEdit_CVPR_Progress_2026-09-16.pptx`
+  and matching PDF extend the report to nine slides. Slides 5-7 cover the
+  ObjectClear paper, a redrawn conceptual diagram, reproduction and research
+  positioning, with Chinese speaker notes. Updated the completed ICEdit pilot
+  status. ObjectClear jobs 1044511/1044514 were reconfirmed PENDING during this
+  update; no result claims added. Local copies are in `/home/hetu/MY project/`.
+  PDF-rendered new slides visually checked; original September 15 deck retained.
+
 - Presentation follow-up: created the actual six-slide English deck at
   `reports/ICEdit_CVPR_Progress_2026-09-15.pptx` and a PDF preview alongside it.
   Rebuild using `python scripts/build_progress_deck.py` (requires python-pptx).
