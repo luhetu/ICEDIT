@@ -220,6 +220,8 @@ public. Keep checkpoints, private data, secrets and large outputs excluded.
   array **1044514** (three seeds, two AGF modes each, concurrency one) with
   `afterok:1044511` and `--kill-on-invalid-dep=yes`. Both last checked PENDING.
   No ObjectClear GPU generation has yet been verified successful.
+  Both queued allocations explicitly request 16 GiB host memory for model
+  loading (updated with scontrol while pending; scripts now match).
   Output paths: `research_outputs/objectclear_1044511_agf_{on,off}` and
   `research_outputs/objectclear_removal_1044514_s{731001,731002,731003}_{on,off}`.
   First next action: query these jobs, inspect logs and output images, then

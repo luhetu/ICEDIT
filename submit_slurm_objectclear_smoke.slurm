@@ -4,6 +4,7 @@
 #SBATCH --gres=gpu:ampere:1
 #SBATCH --time=00:20:00
 #SBATCH --cpus-per-task=2
+#SBATCH --mem=16G
 #SBATCH -J objectclear_smoke
 #SBATCH -o logs/%x%j.out
 #SBATCH --error=logs/%x%j.err
