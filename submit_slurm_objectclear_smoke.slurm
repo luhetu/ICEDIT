@@ -12,4 +12,7 @@ cd /home3/dnrx52/ICEdit
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export PYTHONUNBUFFERED=1
-/home3/dnrx52/.venvs/objectclear/bin/python scripts/objectclear_smoke.py
+/home3/dnrx52/.venvs/objectclear/bin/python scripts/objectclear_smoke.py \
+    --out "research_outputs/objectclear_${SLURM_JOB_ID}_agf_on" --agf on
+/home3/dnrx52/.venvs/objectclear/bin/python scripts/objectclear_smoke.py \
+    --out "research_outputs/objectclear_${SLURM_JOB_ID}_agf_off" --agf off

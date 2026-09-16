@@ -1,0 +1,4 @@
+# NCC overlay only: torch/diffusers/transformers/numpy come from the ICEdit venv.
+# This is not a standalone ObjectClear environment specification.
+scipy==1.15.3
+opencv-python-headless==4.11.0.86

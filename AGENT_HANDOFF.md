@@ -1,6 +1,6 @@
 # ICEdit Research Handoff
 
-Last updated: 2026-09-15 (Europe/London)
+Last updated: 2026-09-16 (Europe/London)
 
 This file is the canonical cross-machine context for the project. Read it before
 making changes. Chat transcripts are not the source of truth: update this file
@@ -119,8 +119,8 @@ Never cancel or modify unrelated jobs.
 
 ## Immediate Next Steps
 
-1. Verify replacement ICEdit job 1042473, its logs and outputs. Historical jobs
-   1040171/1040182 were reconfirmed FAILED on September 15; do not rerun them.
+1. ICEdit job 1042473 is verified COMPLETED (15 runs). Continue ObjectClear
+   official-sample validation, then the same-source/mask removal comparison.
 2. For ObjectClear, compare AGF on/off to separate generation from final fusion.
 3. Run ICEdit, native Fill, ObjectClear, OmniPaint, and Attentive Eraser on the
    same small, fixed removal set with matched information budgets.
@@ -195,6 +195,38 @@ public. Keep checkpoints, private data, secrets and large outputs excluded.
 - Rechecked primary ObjectClear v2, Consistency Critic and AdaEraser pages.
   Instance-ownership control remains a research hypothesis; no new method
   improvement or strong-baseline comparison has been established this session.
+
+## September 16: Removal Pilot and ObjectClear Follow-up
+
+- Verified ICEdit job 1042473 COMPLETED, exit 0, elapsed 00:16:19; all 15
+  records and raw/composite outputs exist. Inspected all 15 raw images.
+- Results and limitations: `edit_topology/experiments/2026-09-16_removal_results.md`.
+  Mean outside-mask raw L1: full ICEdit 0.05176, masked ICEdit 0.02246,
+  desired prompt 0.02264, occluded reference 0.02258, native Fill 0.03567.
+  This single-scene pixel diagnostic is not a semantic or identity metric.
+- ObjectClear complete pipeline import now PASSES. Installed scipy 1.15.3 and
+  opencv-python-headless 4.11.0.86 into its own venv with --no-deps; inherited
+  numpy is 2.2.6. System packages remain disabled; ICEdit packages remain shared.
+- Extended ObjectClear runner with explicit output directory, seed, AGF mode,
+  and optional source/mask. Custom inputs preserve exact dimensions; official
+  sample retains upstream resizing. Fresh output directories are required.
+- The AGF flag changes first-step latent blending AND final fusion. A wrapper
+  records `pre_fusion.png` immediately before calling the unchanged original
+  fusion function, providing a true within-run pre/post fusion comparison.
+- Added a three-seed, concurrency-one Slurm array for the same saved source
+  and mask as ICEdit. It must depend on successful official-sample smoke.
+  Different model/step/guidance settings mean this is not compute-matched.
+- Submitted official-sample AGF on/off job **1044511**. Submitted same-case
+  array **1044514** (three seeds, two AGF modes each, concurrency one) with
+  `afterok:1044511` and `--kill-on-invalid-dep=yes`. Both last checked PENDING.
+  No ObjectClear GPU generation has yet been verified successful.
+  Output paths: `research_outputs/objectclear_1044511_agf_{on,off}` and
+  `research_outputs/objectclear_removal_1044514_s{731001,731002,731003}_{on,off}`.
+  First next action: query these jobs, inspect logs and output images, then
+  compare pre-fusion/output pairs. Do not equate successful import/submission
+  with completed inference or semantic success.
+- Copied the completed ICEdit metrics into `reports/removal_pilot_1042473_metrics.csv`.
+  Python compilation, shell syntax and diff whitespace checks passed.
 
 ## Latest Sync Verification
 
